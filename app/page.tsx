@@ -77,35 +77,37 @@ export default function HomePage() {
 
             {/* Main title with stunning gradient */}
             <div className="space-y-4">
-              <h1 className="text-6xl md:text-8xl font-black bg-gradient-to-r from-white via-green-400 to-emerald-500 bg-clip-text text-transparent animate-gradient bg-[length:200%_200%]">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black bg-gradient-to-r from-white via-green-400 to-emerald-500 bg-clip-text text-transparent animate-gradient bg-[length:200%_200%]">
                 OverloadedTech
               </h1>
               <div className="h-1 w-32 mx-auto bg-gradient-to-r from-green-400 to-emerald-500 rounded-full animate-shimmer"></div>
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-bold text-gradient-purple">Luca Zani's Digital Space</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gradient-purple">Luca Zani's Digital Space</h2>
 
             <div className="max-w-3xl mx-auto space-y-4">
-              <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
-                Software Engineer & Tinkerer building with
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed px-4">
+                Upcoming Software Engineer, Student, Investor & Tinkerer building with
                 <span className="text-gradient font-semibold"> Python, Node.js, C++, and Rust</span>
               </p>
 
-              <div className="flex flex-wrap justify-center gap-4 text-sm">                <div className="glass px-4 py-2 rounded-full border border-green-500/20">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-4 text-xs sm:text-sm px-4">
+                <div className="glass px-3 sm:px-4 py-2 rounded-full border border-green-500/20">
                   <span className="text-green-400">
                     <span className="emoji">🚀</span> Online since 1 Aug 2021
                   </span>
-                </div>                <div className="glass px-4 py-2 rounded-full border border-purple-500/20">
+                </div>
+                <div className="glass px-3 sm:px-4 py-2 rounded-full border border-purple-500/20">
                   <span className="text-purple-400">
                     <span className="emoji">⚡</span> Version 2.3
                   </span>
                 </div>
-                <div className="glass px-4 py-2 rounded-full border border-blue-500/20">
+                <div className="glass px-3 sm:px-4 py-2 rounded-full border border-blue-500/20">
                   <span className="text-blue-400">
                     <span className="emoji">🔧</span> Last Compiled on June 24, 2025
                   </span>
                 </div>
-                <div className="glass px-4 py-2 rounded-full border border-orange-500/20">
+                <div className="glass px-3 sm:px-4 py-2 rounded-full border border-orange-500/20">
                   <span className="text-orange-400">
                     <span className="emoji">⚙️</span> Made with Next.js
                   </span>
@@ -114,11 +116,11 @@ export default function HomePage() {
             </div>
 
             {/* Enhanced CTA buttons */}
-            <div className="flex flex-wrap justify-center gap-6 pt-8">
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6 pt-8 px-4">
               <Button
                 asChild
                 size="lg"
-                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold px-8 py-4 rounded-full btn-glow hover-lift-stable neon-green"
+                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full btn-glow hover-lift-stable neon-green min-h-[44px] w-full sm:w-auto"
               >
                 <Link href="/projects">
                   <Rocket className="mr-2 h-5 w-5" />
@@ -129,7 +131,7 @@ export default function HomePage() {
               <Button
                 asChild
                 variant="outline"
-                className="glass border-gray-500/30 text-gray-200 hover:bg-white/10 font-semibold px-8 py-4 rounded-full hover-lift-stable"
+                className="glass border-gray-500/30 text-gray-200 hover:bg-white/10 font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full hover-lift-stable min-h-[44px] w-full sm:w-auto"
               >
                 <Link href="https://github.com/OverloadedTech" target="_blank" rel="noopener noreferrer">
                   <Github className="mr-2 h-5 w-5" />
@@ -140,7 +142,7 @@ export default function HomePage() {
               <Button
                 asChild
                 variant="outline"
-                className="glass border-blue-500/30 text-blue-200 hover:bg-blue-500/10 font-semibold px-8 py-4 rounded-full hover-lift-stable"
+                className="glass border-blue-500/30 text-blue-200 hover:bg-blue-500/10 font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full hover-lift-stable min-h-[44px] w-full sm:w-auto"
               >
                 <Link href="https://www.linkedin.com/in/overloadedtech/" target="_blank" rel="noopener noreferrer">
                   <Linkedin className="mr-2 h-5 w-5" />
@@ -153,50 +155,50 @@ export default function HomePage() {
       </section>
 
       {/* Skills Section with enhanced cards */}
-      <section className="py-24 px-4 relative">
+      <section className="py-16 sm:py-24 px-4 relative">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl md:text-5xl font-bold text-gradient mb-4">What I Work With</h3>
+          <div className="text-center mb-12 sm:mb-16">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gradient mb-4">What I Work With</h3>
             <div className="w-24 h-1 bg-gradient-to-r from-green-400 to-emerald-500 mx-auto rounded-full"></div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="card-enhanced rounded-2xl p-8 hover-lift-stable group">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="card-enhanced rounded-2xl p-6 sm:p-8 hover-lift-stable group">
               <div className="mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl flex items-center justify-center mb-4 group-hover:animate-glow">
-                  <Database className="h-8 w-8 text-white" />
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl flex items-center justify-center mb-4 group-hover:animate-glow">
+                  <Database className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
-                <h4 className="text-2xl font-bold text-gradient mb-3">Backend Development</h4>
+                <h4 className="text-xl sm:text-2xl font-bold text-gradient mb-3">Backend Development</h4>
               </div>
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
                 Building server-side applications, APIs, and databases. Working with Python, Node.js, C++, and Rust to
                 create reliable backend systems.
               </p>
             </div>
 
-            <div className="card-enhanced rounded-2xl p-8 hover-lift-stable group">
+            <div className="card-enhanced rounded-2xl p-6 sm:p-8 hover-lift-stable group">
               <div className="mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center mb-4 group-hover:animate-glow">
-                  <Server className="h-8 w-8 text-white" />
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center mb-4 group-hover:animate-glow">
+                  <Server className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
-                <h4 className="text-2xl font-bold text-gradient-purple mb-3">System Tinkering</h4>
+                <h4 className="text-xl sm:text-2xl font-bold text-gradient-purple mb-3">System Tinkering</h4>
               </div>
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
                 Experimenting with system architecture, learning about distributed systems, and figuring out how to make
                 things work together.
               </p>
             </div>
 
-            <div className="card-enhanced rounded-2xl p-8 hover-lift-stable group">
+            <div className="card-enhanced rounded-2xl p-6 sm:p-8 hover-lift-stable group">
               <div className="mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center mb-4 group-hover:animate-glow">
-                  <Terminal className="h-8 w-8 text-white" />
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center mb-4 group-hover:animate-glow">
+                  <Terminal className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
-                <h4 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-3">
+                <h4 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-3">
                   DevOps Learning
                 </h4>
               </div>
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
                 Learning deployment strategies, monitoring systems, and automation. Still figuring out the best
                 practices but enjoying the journey.
               </p>
@@ -206,14 +208,14 @@ export default function HomePage() {
       </section>
 
       {/* Journey Timeline with enhanced styling */}
-      <section className="py-24 px-4 relative">
+      <section className="py-16 sm:py-24 px-4 relative">
         <div className="container mx-auto max-w-5xl relative">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl md:text-5xl font-bold text-gradient mb-4">My Coding Journey</h3>
-            <p className="text-xl text-gray-400">From first experiments to current projects</p>
+          <div className="text-center mb-12 sm:mb-16">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gradient mb-4">My Coding Journey</h3>
+            <p className="text-lg sm:text-xl text-gray-400">From first experiments to current projects</p>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {[
               {
                 year: "2017",
@@ -247,21 +249,21 @@ export default function HomePage() {
               const IconComponent = item.icon
 
               return (
-                <div key={index} className="card-enhanced rounded-2xl p-8 hover-lift-stable">
-                  <div className="flex items-start gap-6">
+                <div key={index} className="card-enhanced rounded-2xl p-6 sm:p-8 hover-lift-stable">
+                  <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
                     <div
-                      className={`w-16 h-16 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center flex-shrink-0`}
+                      className={`w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center flex-shrink-0`}
                     >
-                      <IconComponent className="h-8 w-8 text-white" />
+                      <IconComponent className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                     </div>
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <Badge className={`bg-gradient-to-r ${item.color} text-white border-0 px-3 py-1`}>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
+                        <Badge className={`bg-gradient-to-r ${item.color} text-white border-0 px-3 py-1 text-xs sm:text-sm w-fit`}>
                           {item.year}
                         </Badge>
-                        <h4 className="text-2xl font-bold text-white">{item.title}</h4>
+                        <h4 className="text-xl sm:text-2xl font-bold text-white">{item.title}</h4>
                       </div>
-                      <p className="text-gray-300 leading-relaxed">{item.desc}</p>
+                      <p className="text-gray-300 leading-relaxed text-sm sm:text-base">{item.desc}</p>
                     </div>
                   </div>
                 </div>
@@ -272,21 +274,21 @@ export default function HomePage() {
       </section>
 
       {/* Projects Preview with stunning effects */}
-      <section className="py-24 px-4 relative">
+      <section className="py-16 sm:py-24 px-4 relative">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl md:text-5xl font-bold text-gradient mb-4">My Projects</h3>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">Check out what I've been working on</p>
+          <div className="text-center mb-12 sm:mb-16">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gradient mb-4">My Projects</h3>
+            <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto">Check out what I've been working on</p>
           </div>
 
           <div className="text-center">
             <Button
               asChild
               size="lg"
-              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold px-12 py-6 rounded-full btn-glow hover-lift-stable text-lg"
+              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold px-8 sm:px-12 py-4 sm:py-6 rounded-full btn-glow hover-lift-stable text-base sm:text-lg min-h-[44px] w-full sm:w-auto max-w-xs sm:max-w-none"
             >
               <Link href="/projects">
-                <Zap className="mr-3 h-6 w-6" />
+                <Zap className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" />
                 View All Projects
               </Link>
             </Button>
@@ -295,67 +297,68 @@ export default function HomePage() {
       </section>
 
       {/* About Section with glass morphism */}
-      <section className="py-24 px-4 relative">
+      <section className="py-16 sm:py-24 px-4 relative">
         <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-12">
-            <h3 className="text-4xl md:text-5xl font-bold text-gradient mb-4">About Me</h3>
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gradient mb-4">About Me</h3>
           </div>
-          <div className="card-enhanced rounded-3xl p-12 text-center hover-lift-stable">
-            <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full mx-auto mb-8 flex items-center justify-center animate-glow">
-              <Code className="h-12 w-12 text-white" />
+          <div className="card-enhanced rounded-3xl p-8 sm:p-12 text-center hover-lift-stable">
+            <div className="w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full mx-auto mb-6 sm:mb-8 flex items-center justify-center animate-glow">
+              <Code className="h-8 w-8 sm:h-12 sm:w-12 text-white" />
             </div>
 
-            <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-6">
-              Hey! I\\\'m <span className="text-gradient font-semibold">Luca Zani</span>, a{" "}
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed mb-4 sm:mb-6">
+              Hey! I'm <span className="text-gradient font-semibold">Luca Zani</span>, a{" "}
               {new Date().getFullYear() - (new Date() < new Date(new Date().getFullYear(), 7, 18) ? 2009 : 2008)}
-              -year-old Italian software engineer born on August 18, 2008.
+              -year-old Italian upcoming software engineer and student born on August 18, 2008.
             </p>
 
-            <p className="text-lg text-gray-400 leading-relaxed">
-              I am mainly a backend developer, a thinkerer, a 3D printer, and an investor. When I\\\'m not
-              building backend systems or experimenting with new tech, I\\\'m listening to music and learning
+            <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed">
+              I am mainly a backend developer, a tinkerer, a 3D printer, and an investor. When I'm not
+              building backend systems or experimenting with new tech, I'm listening to music and learning
               something new.
             </p>
-          </div>       </div>
+          </div>
+        </div>
       </section>
 
       {/* Contact Section with enhanced styling */}
-      <section className="py-24 px-4 relative">
+      <section className="py-16 sm:py-24 px-4 relative">
         <div className="container mx-auto max-w-4xl text-center">
-          <div className="mb-12">
-            <h3 className="text-4xl md:text-5xl font-bold text-gradient mb-4">
+          <div className="mb-8 sm:mb-12">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gradient mb-4">
               Let's Connect! <span className="emoji">🚀</span>
             </h3>
           </div>
 
-          <div className="card-enhanced rounded-3xl p-12 mb-12 hover-lift-stable">
-            <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full mx-auto mb-6 flex items-center justify-center animate-glow">
-              <Mail className="h-10 w-10 text-white" />
+          <div className="card-enhanced rounded-3xl p-6 sm:p-12 mb-8 sm:mb-12 hover-lift-stable">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center animate-glow">
+              <Mail className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
             </div>
 
-            <p className="text-xl text-gray-300 mb-6">
+            <p className="text-base sm:text-xl text-gray-300 mb-4 sm:mb-6">
               Want to chat about code or collaborate? Reach out at{" "}
-              <Link href="mailto:luca@lucazani.com" className="text-gradient font-semibold hover:underline">
+              <Link href="mailto:luca@lucazani.com" className="text-gradient font-semibold hover:underline break-all">
                 luca@lucazani.com
               </Link>
             </p>
 
-            <div className="glass px-8 py-4 rounded-full border border-green-500/30 inline-block mb-8">
-              <span className="text-green-400 font-semibold text-lg">
+            <div className="glass px-4 sm:px-8 py-3 sm:py-4 rounded-full border border-green-500/30 inline-block mb-6 sm:mb-8">
+              <span className="text-green-400 font-semibold text-sm sm:text-lg">
                 <span className="emoji">✨</span> Open for collaborations
               </span>
             </div>
 
-            <p className="text-gray-400 mb-8">
+            <p className="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">
               Whether it's backend development, project ideas, or just tech discussions - I'm always excited to connect
               with fellow developers and learn from others.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 mb-4 sm:mb-6">
               <Button
                 asChild
                 variant="outline"
-                className="glass border-blue-500/30 text-blue-200 hover:bg-blue-500/10 font-semibold px-8 py-3 rounded-full hover-lift-stable"
+                className="glass border-blue-500/30 text-blue-200 hover:bg-blue-500/10 font-semibold px-6 sm:px-8 py-3 rounded-full hover-lift-stable min-h-[44px] w-full sm:w-auto"
               >
                 <Link href="https://www.linkedin.com/in/overloadedtech/" target="_blank" rel="noopener noreferrer">
                   <Linkedin className="mr-2 h-5 w-5" />
@@ -364,17 +367,17 @@ export default function HomePage() {
               </Button>
             </div>
 
-            <div className="text-sm text-gray-500">
+            <div className="text-xs sm:text-sm text-gray-500">
               <p>Official responses only from luca@lucazani.com</p>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 mb-12">
-            <div className="card-enhanced rounded-2xl p-8">
-              <h4 className="text-green-400 font-bold text-lg mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
+            <div className="card-enhanced rounded-2xl p-6 sm:p-8">
+              <h4 className="text-green-400 font-bold text-base sm:text-lg mb-4">
                 <span className="emoji">✅</span> Let's discuss:
               </h4>
-              <ul className="text-gray-300 space-y-2 text-left">
+              <ul className="text-gray-300 space-y-2 text-left text-sm sm:text-base">
                 <li>• Backend development & system design</li>
                 <li>• Project collaboration opportunities</li>
                 <li>• Technical challenges & solutions</li>
@@ -383,11 +386,11 @@ export default function HomePage() {
               </ul>
             </div>
 
-            <div className="card-enhanced rounded-2xl p-8">
-              <h4 className="text-red-400 font-bold text-lg mb-4">
+            <div className="card-enhanced rounded-2xl p-6 sm:p-8">
+              <h4 className="text-red-400 font-bold text-base sm:text-lg mb-4">
                 <span className="emoji">❌</span> Please skip:
               </h4>
-              <ul className="text-gray-300 space-y-2 text-left">
+              <ul className="text-gray-300 space-y-2 text-left text-sm sm:text-base">
                 <li>• Crypto investment schemes</li>
                 <li>• Dropshipping course offers</li>
                 <li>• Generic SEO services</li>
@@ -396,11 +399,11 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-6">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6">
             <Button
               asChild
               variant="outline"
-              className="glass border-gray-500/30 text-gray-200 hover:bg-white/10 px-6 py-3 rounded-full hover-lift-stable"
+              className="glass border-gray-500/30 text-gray-200 hover:bg-white/10 px-4 sm:px-6 py-3 rounded-full hover-lift-stable min-h-[44px] w-full sm:w-auto"
             >
               <Link href="https://t.me/OverloadedTechInfo" target="_blank" rel="noopener noreferrer">
                 <span className="mr-2 emoji">📱</span>
@@ -411,22 +414,11 @@ export default function HomePage() {
             <Button
               asChild
               variant="outline"
-              className="glass border-gray-500/30 text-gray-200 hover:bg-white/10 px-6 py-3 rounded-full hover-lift-stable"
+              className="glass border-gray-500/30 text-gray-200 hover:bg-white/10 px-4 sm:px-6 py-3 rounded-full hover-lift-stable min-h-[44px] w-full sm:w-auto"
             >
               <Link href="https://blog.lucazani.com/" target="_blank" rel="noopener noreferrer">
                 <span className="mr-2 emoji">📝</span>
-                My Blog Archive
-              </Link>
-            </Button>
-
-            <Button
-              asChild
-              variant="outline"
-              className="glass border-gray-500/30 text-gray-200 hover:bg-white/10 px-6 py-3 rounded-full hover-lift-stable"
-            >
-              <Link href="https://status.lucazani.com/" target="_blank" rel="noopener noreferrer">
-                <Server className="mr-2 h-4 w-4" />
-                System Status
+                Personal Blog
               </Link>
             </Button>
           </div>
@@ -434,60 +426,23 @@ export default function HomePage() {
       </section>
 
       {/* Footer with gradient */}
-      <footer className="py-12 px-4 border-t border-gray-800/50 relative">
+      <footer className="py-8 sm:py-12 px-4 border-t border-gray-800/50 relative">
         <div className="container mx-auto max-w-6xl text-center relative">
-          <p className="text-gray-400 mb-6 text-lg">
+          <p className="text-gray-400 mb-4 sm:mb-6 text-sm sm:text-lg">
             MIT License {new Date().getFullYear()} Luca Zani - Open source and built with{" "}
             <span className="emoji">❤️</span>
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="glass border-green-500/30 text-green-300 hover:bg-green-500/10 rounded-full hover-lift-stable"
-            >
-              <Link href="https://github.com/OverloadedTech/website" target="_blank" rel="noopener noreferrer">
-                <Github className="mr-2 h-4 w-4" />
-                View Source Code
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="glass border-gray-600/30 text-gray-300 hover:bg-white/10 rounded-full"
-            >
-              <Link href="/license">View License</Link>
-            </Button>
-          </div>
-          {/* Legacy Site Info */}
-          <div className="mt-8 pt-6 border-t border-gray-800/50">
-            <p className="text-gray-500 mb-4 text-sm">Looking for the old site? Check out the previous version:</p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="glass border-purple-500/30 text-purple-300 hover:bg-purple-500/10 rounded-full hover-lift-stable"
-              >
-                <Link href="https://legacy.lucazani.com" target="_blank" rel="noopener noreferrer">
-                  <Globe className="mr-2 h-4 w-4" />
-                  Visit Legacy Site
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="glass border-gray-600/30 text-gray-400 hover:bg-white/10 rounded-full hover-lift-stable"
-              >
-                <Link href="https://github.com/OverloadedTech/legacywebsite" target="_blank" rel="noopener noreferrer">
-                  <Github className="mr-2 h-4 w-4" />
-                  Legacy Source
-                </Link>
-              </Button>
-            </div>
+
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 text-sm text-gray-500">
+            <Link href="/license" className="hover:text-green-400 transition-colors">
+              View License
+            </Link>
+            <span className="hidden sm:inline">•</span>
+            <Link href="https://github.com/OverloadedTech" className="hover:text-green-400 transition-colors">
+              Source Code
+            </Link>
+            <span className="hidden sm:inline">•</span>
+            <span>Made in Italy</span>
           </div>
         </div>
       </footer>
