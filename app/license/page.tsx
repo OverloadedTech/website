@@ -51,11 +51,8 @@ export default function LicensePage() {
       </div>
 
       {/* Floating orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-green-400/20 to-emerald-500/20 rounded-full blur-3xl animate-float"></div>
-      <div
-        className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-purple-400/20 to-pink-500/20 rounded-full blur-3xl animate-float"
-        style={{ animationDelay: "3s" }}
-      ></div>
+      <div className="floating-orb orb-1"></div>
+      <div className="floating-orb orb-2"></div>
 
       {/* Header */}
       <div className="container mx-auto max-w-4xl py-12 px-4 relative z-10">

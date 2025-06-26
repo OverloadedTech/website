@@ -16,6 +16,50 @@
             color: #e0e0e0;
             text-align: center;
             flex-direction: column;
+            position: relative; /* For particle positioning */
+            overflow: hidden; /* Hide overflow from particles */
+        }
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+        }
+        .particle:nth-child(1) { width: 4px; height: 4px; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 6px; height: 6px; left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { width: 3px; height: 3px; left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { width: 5px; height: 5px; left: 40%; animation-delay: 3s; }
+        .particle:nth-child(5) { width: 4px; height: 4px; left: 50%; animation-delay: 4s; }
+        .particle:nth-child(6) { width: 6px; height: 6px; left: 60%; animation-delay: 5s; }
+        .particle:nth-child(7) { width: 3px; height: 3px; left: 70%; animation-delay: 6s; }
+        .particle:nth-child(8) { width: 5px; height: 5px; left: 80%; animation-delay: 7s; }
+        .particle:nth-child(9) { width: 4px; height: 4px; left: 90%; animation-delay: 8s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(30px);
+            animation: float 6s ease-in-out infinite;
+            z-index: -1;
+        }
+        .orb-1 { top: 20%; left: 10%; width: 150px; height: 150px; background: linear-gradient(to right, rgba(34, 197, 94, 0.2), rgba(6, 214, 160, 0.2)); }
+        .orb-2 { bottom: 20%; right: 10%; width: 200px; height: 200px; background: linear-gradient(to right, rgba(139, 92, 246, 0.2), rgba(192, 132, 252, 0.2)); animation-delay: 3s; }
+        @keyframes animate-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
         }
         .container {
             background-color: #2a2a4a;
@@ -69,6 +113,19 @@
     </style>
 </head>
 <body>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
     <div class="container">
         <h1>404</h1>
         <h2>Page Not Found</h2>
