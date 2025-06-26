@@ -376,23 +376,6 @@
     height: 2px !important;
   }
   
-  /* Improve text readability on mobile */
-  .text-6xl {
-    font-size: 3rem !important;
-  }
-  
-  .md\:text-8xl {
-    font-size: 4rem !important;
-  }
-  
-  .text-5xl {
-    font-size: 2.5rem !important;
-  }
-  
-  .md\:text-7xl {
-    font-size: 3.5rem !important;
-  }
-  
   /* Improve card padding on mobile */
   .card-enhanced {
     padding: 1.5rem !important;

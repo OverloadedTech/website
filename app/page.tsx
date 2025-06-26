@@ -77,16 +77,16 @@ export default function HomePage() {
 
             {/* Main title with stunning gradient */}
             <div className="space-y-4">
-              <h1 className="text-6xl md:text-8xl font-black bg-gradient-to-r from-white via-green-400 to-emerald-500 bg-clip-text text-transparent animate-gradient bg-[length:200%_200%]">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black bg-gradient-to-r from-white via-green-400 to-emerald-500 bg-clip-text text-transparent animate-gradient bg-[length:200%_200%] leading-tight">
                 OverloadedTech
               </h1>
               <div className="h-1 w-32 mx-auto bg-gradient-to-r from-green-400 to-emerald-500 rounded-full animate-shimmer"></div>
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-bold text-gradient-purple">Luca Zani's Digital Space</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gradient-purple">Luca Zani's Digital Space</h2>
 
             <div className="max-w-3xl mx-auto space-y-4">
-              <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed px-4">
                 Upcoming Software Engineer, Tinkerer, Investor (and student) building with
                 <span className="text-gradient font-semibold"> Python, Node.js, C++, and Rust</span>
               </p>
