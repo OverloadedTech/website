@@ -2,7 +2,8 @@
 const nextConfig = {
   // Configure for static export
   output: "export",
-  trailingSlash: false,
+  trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   
   eslint: {
     ignoreDuringBuilds: true,
@@ -13,8 +14,12 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  
+  // Ensure proper 404 handling for static hosting
+  async generateBuildId() {
+    return 'build'
+  },
 };
 
 export default nextConfig;
-
 

@@ -1,16 +1,15 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": ".next",
+  "outputDirectory": "out",
   "framework": "nextjs",
-  "functions": {
-    "app/api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
+  "trailingSlash": true,
+  "cleanUrls": false,
   "routes": [
     {
-      "src": "/404",
-      "dest": "/not-found"
+      "src": "/(.*)",
+      "dest": "/404.html",
+      "status": 404
     }
   ]
 }
+
