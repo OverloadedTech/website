@@ -5,20 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Page Not Found</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
             background-color: #1a1a2e;
             color: #e0e0e0;
             text-align: center;
             flex-direction: column;
-            position: relative; /* For particle positioning */
-            overflow: hidden; /* Hide overflow from particles */
+            position: relative;
+            overflow: hidden;
         }
+        
         .particles {
             position: fixed;
             top: 0;
@@ -29,38 +39,123 @@
             pointer-events: none;
             z-index: -1;
         }
+        
         .particle {
             position: absolute;
             background: radial-gradient(circle, rgba(34, 197, 94, 0.8) 0%, transparent 70%);
             border-radius: 50%;
             animation: float 8s infinite ease-in-out;
         }
-        .particle:nth-child(1) { width: 4px; height: 4px; left: 10%; animation-delay: 0s; }
-        .particle:nth-child(2) { width: 6px; height: 6px; left: 20%; animation-delay: 1s; }
-        .particle:nth-child(3) { width: 3px; height: 3px; left: 30%; animation-delay: 2s; }
-        .particle:nth-child(4) { width: 5px; height: 5px; left: 40%; animation-delay: 3s; }
-        .particle:nth-child(5) { width: 4px; height: 4px; left: 50%; animation-delay: 4s; }
-        .particle:nth-child(6) { width: 6px; height: 6px; left: 60%; animation-delay: 5s; }
-        .particle:nth-child(7) { width: 3px; height: 3px; left: 70%; animation-delay: 6s; }
-        .particle:nth-child(8) { width: 5px; height: 5px; left: 80%; animation-delay: 7s; }
-        .particle:nth-child(9) { width: 4px; height: 4px; left: 90%; animation-delay: 8s; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        
+        .particle:nth-child(1) { 
+            width: 4px; 
+            height: 4px; 
+            left: 10%; 
+            top: 20%;
+            animation-delay: 0s; 
         }
+        .particle:nth-child(2) { 
+            width: 6px; 
+            height: 6px; 
+            left: 20%; 
+            top: 40%;
+            animation-delay: 1s; 
+        }
+        .particle:nth-child(3) { 
+            width: 3px; 
+            height: 3px; 
+            left: 30%; 
+            top: 60%;
+            animation-delay: 2s; 
+        }
+        .particle:nth-child(4) { 
+            width: 5px; 
+            height: 5px; 
+            left: 40%; 
+            top: 80%;
+            animation-delay: 3s; 
+        }
+        .particle:nth-child(5) { 
+            width: 4px; 
+            height: 4px; 
+            left: 50%; 
+            top: 30%;
+            animation-delay: 4s; 
+        }
+        .particle:nth-child(6) { 
+            width: 6px; 
+            height: 6px; 
+            left: 60%; 
+            top: 50%;
+            animation-delay: 5s; 
+        }
+        .particle:nth-child(7) { 
+            width: 3px; 
+            height: 3px; 
+            left: 70%; 
+            top: 70%;
+            animation-delay: 6s; 
+        }
+        .particle:nth-child(8) { 
+            width: 5px; 
+            height: 5px; 
+            left: 80%; 
+            top: 25%;
+            animation-delay: 7s; 
+        }
+        .particle:nth-child(9) { 
+            width: 4px; 
+            height: 4px; 
+            left: 90%; 
+            top: 45%;
+            animation-delay: 8s; 
+        }
+        
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px); 
+                opacity: 0.7;
+            }
+            50% { 
+                transform: translateY(-20px); 
+                opacity: 1;
+            }
+        }
+        
         .floating-orb {
             position: absolute;
             border-radius: 50%;
             filter: blur(30px);
-            animation: float 6s ease-in-out infinite;
+            animation: orb-float 6s ease-in-out infinite;
             z-index: -1;
         }
-        .orb-1 { top: 20%; left: 10%; width: 150px; height: 150px; background: linear-gradient(to right, rgba(34, 197, 94, 0.2), rgba(6, 214, 160, 0.2)); }
-        .orb-2 { bottom: 20%; right: 10%; width: 200px; height: 200px; background: linear-gradient(to right, rgba(139, 92, 246, 0.2), rgba(192, 132, 252, 0.2)); animation-delay: 3s; }
-        @keyframes animate-float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        
+        .orb-1 { 
+            top: 20%; 
+            left: 10%; 
+            width: 150px; 
+            height: 150px; 
+            background: linear-gradient(to right, rgba(34, 197, 94, 0.2), rgba(6, 214, 160, 0.2)); 
         }
+        
+        .orb-2 { 
+            bottom: 20%; 
+            right: 10%; 
+            width: 200px; 
+            height: 200px; 
+            background: linear-gradient(to right, rgba(139, 92, 246, 0.2), rgba(192, 132, 252, 0.2)); 
+            animation-delay: 3s; 
+        }
+        
+        @keyframes orb-float {
+            0%, 100% { 
+                transform: translateY(0px) scale(1); 
+            }
+            50% { 
+                transform: translateY(-20px) scale(1.1); 
+            }
+        }
+        
         .container {
             background-color: #2a2a4a;
             padding: 40px;
@@ -69,46 +164,130 @@
             max-width: 600px;
             width: 90%;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1;
         }
+        
         h1 {
             font-size: 5em;
             margin-bottom: 10px;
             color: #e94560;
             text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
         }
+        
         h2 {
             font-size: 2em;
             margin-bottom: 20px;
-            color: #0f3460;
+            color: #22c55e;
         }
+        
         p {
             font-size: 1.1em;
             line-height: 1.6;
             margin-bottom: 20px;
         }
+        
         a {
-            color: #16213e;
+            color: #22c55e;
             text-decoration: none;
             font-weight: bold;
             transition: color 0.3s ease;
         }
+        
         a:hover {
             color: #e94560;
         }
+        
         .button {
             display: inline-block;
-            background-color: #0f3460;
-            color: #e0e0e0;
+            background-color: #22c55e;
+            color: #1a1a2e;
             padding: 12px 25px;
             border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: all 0.3s ease;
             margin-top: 20px;
+            border: none;
+            cursor: pointer;
         }
+        
         .button:hover {
-            background-color: #16213e;
+            background-color: #16a34a;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
+        }
+        
+        .timer-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .timer-text {
+            font-size: 1em;
+            color: #e0e0e0;
+            margin-bottom: 10px;
+        }
+        
+        .countdown {
+            font-size: 2em;
+            font-weight: bold;
+            color: #22c55e;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            border-radius: 3px;
+            transition: width 1s linear;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            h1 {
+                font-size: 3.5em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+            
+            p {
+                font-size: 1em;
+            }
+            
+            .orb-1, .orb-2 {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
         }
     </style>
 </head>
@@ -131,8 +310,53 @@
         <h2>Page Not Found</h2>
         <p>Oops! It looks like the page you're looking for has gone on a little adventure.</p>
         <p>Don't worry, you can head back to the homepage or explore some other cool stuff.</p>
-        <a href="/website" class="button">Go to Homepage</a>
+        <a href="/" class="button">Go to Homepage</a>
+        
+        <div class="timer-container">
+            <div class="timer-text">Automatically redirecting to homepage in:</div>
+            <div class="countdown" id="countdown">10</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Auto-redirect timer functionality
+        let timeLeft = 10;
+        const countdownElement = document.getElementById("countdown");
+        const progressFillElement = document.getElementById("progressFill");
+        
+        // Set initial progress bar width
+        progressFillElement.style.width = "100%";
+        
+        const timer = setInterval(() => {
+            timeLeft--;
+            countdownElement.textContent = timeLeft;
+            
+            // Update progress bar
+            const progressPercentage = (timeLeft / 10) * 100;
+            progressFillElement.style.width = progressPercentage + "%";
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                // Redirect to homepage
+                window.location.href = "/";
+            }
+        }, 1000);
+        
+        // Allow users to cancel the redirect by clicking anywhere on the page
+        document.addEventListener("click", () => {
+            clearInterval(timer);
+            countdownElement.textContent = "Cancelled";
+            progressFillElement.style.width = "0%";
+            document.querySelector(".timer-text").textContent = "Auto-redirect cancelled. Click the button above to go to homepage.";
+        });
+        
+        // Prevent the redirect cancellation when clicking the homepage button
+        document.querySelector(".button").addEventListener("click", (e) => {
+            e.stopPropagation();
+        });
+    </script>
 </body>
 </html>
-
