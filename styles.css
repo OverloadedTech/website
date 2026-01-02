@@ -1,0 +1,111 @@
+ {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #111;
+    color: #ccc;
+    line-height: 1.6;
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    color: #888;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #fff;
+}
+
+main section {
+    margin-bottom: 35px;
+}
+
+h1 {
+    color: #fff;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+h2 {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+h3 {
+    color: #ddd;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    margin-top: 15px;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+p.small {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+strong {
+    color: #fff;
+}
+
+a {
+    color: #6cf;
+}
+
+a:hover {
+    color: #9df;
+}
+
+ul {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+footer {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 500px) {
+    body {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    nav {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+}

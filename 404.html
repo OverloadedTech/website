@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Luca Zani</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">lucazani.com</a>
+            <a href="contact.html">contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>404</h1>
+            <p>Looks like you found the secret level where nothing exists yet.</p>
+            <p>Maybe the page took a coffee break, try heading <a href="/">back home</a> or send me an email if you think it's missing.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>© <span id="year"></span> Luca Zani | Licensed under <a href="./LICENSE" target="_blank" rel="noopener noreferrer">MIT</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

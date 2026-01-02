@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Luca Zani - Backend Developer">
+    <title>Luca Zani</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">lucazani.com</a>
+            <a href="contact.html">contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>Luca Zani</h1>
+            <p><span id="age"></span> y/o developer from Bolzano, Italy, also known online as <strong>OverloadedTech</strong>. I write code, solder, do some 3D printing, investing, and whatever else catches my attention; I don't define myself as &quot;special&quot; my interests feel special to me but they're normal like anyone else's.</p>
+            <p>I mainly focus on backend work, but I'm discovering frontend programming for some projects and I'm actually liking it.</p>
+            <p class="small">(yes, the age is auto updated)</p>
+        </section>
+
+        <section>
+            <h2>Open Source</h2>
+            <p>I don't contribute much to open source anymore, sadly :(</p>
+            <p>Most of my work these days is on private repos: school projects, stuff for other places I'm involved with. The public repos you see on my GitHub are mostly older experiments or utilities I built while learning.</p>
+            <p>I plan to come back and help with FOSS as soon as I find some projects that interest me and I have a bit of free time.</p>
+        </section>
+
+        <section>
+            <h2>What I'm working on</h2>
+            <p>Currently focused on backend stuff: APIs, databases, system architecture. I like building things that actually work and solving problems that matter.</p>
+            <p>I'm also working on some new projects that I'll talk about as soon as I can, once they become more mature and ready to show.</p>
+            
+            <h3>Empty Character</h3>
+            <p>A basic empty character app I wrote when I was 13. Nothing too special, nothing too big, and I probably overthought it a bit. It's available on its <a href="https://emptycharacterapp.web.app/" target="_blank">dedicated site</a> and on the <a href="https://play.google.com/store/apps/details?id=com.empty.character" target="_blank">Play Store</a>.</p>
+            <p>The project is open and free. Due to its basic nature, it's maintained by me but hasn't been updated in a while.</p>
+        </section>
+
+        <section>
+            <h2>Links</h2>
+            <ul>
+                <li><a href="https://github.com/OverloadedTech" target="_blank">GitHub</a></li>
+                <li><a href="https://github.com/OverloadedTech/website" target="_blank">This site's source code</a></li>
+                <li><a href="contact.html">Email me</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>© <span id="year"></span> Luca Zani | Licensed under <a href="./LICENSE" target="_blank" rel="noopener noreferrer">MIT</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+        function calculateAge() {
+            const birthDate = new Date(2008, 7, 18);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+        document.getElementById('age').textContent = calculateAge();
+    </script>
+</body>
+</html>
