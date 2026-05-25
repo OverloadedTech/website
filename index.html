@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Luca Zani">
+    <title>Luca Zani</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">lucazani.com</a>
+            <a href="projects.html">projects</a>
+            <a href="blog/">blog</a>
+            <a href="contact.html">contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>Luca Zani's Website</h1>
+            <p><span id="age"></span> y/o developer from Bolzano, Italy. Backend-focused but full-stack when needed. I write code, solder, 3D print, and build things that make other people's work a little easier.</p>
+            <p class="small">(yes, the age is auto updated, check it out on 18 August midnight)</p>
+            <p>Feel free to <a href="contact.html">reach out anytime</a></p>
+        </section>
+
+        <section>
+            <h2>What I'm Building</h2>
+
+            <div class="project">
+                <h3>BananaWiki (2026)</h3>
+                <p>Flask-based wiki platform with roles, plugins, mind maps, and Kanban boards. Approved as a school-work program.</p>
+                <a href="projects.html#bananawiki" class="btn">read more →</a>
+            </div>
+
+            <div class="project">
+                <h3>Wicked Agent</h3>
+                <p>Open-source, asynchronous coding agent you can host on your own VPS. Inspired by Devin AI.</p>
+                <a href="projects.html#wicked-agent" class="btn">read more →</a>
+            </div>
+
+            <div class="project">
+                <h3>Unnamed Engine</h3>
+                <p>A game engine experiment. Still learning, still exploring.</p>
+                <a href="projects.html#unnamed-engine" class="btn">read more →</a>
+            </div>
+        </section>
+
+        <section>
+            <h2>Older Projects</h2>
+            <ul>
+                <li><a href="projects.html#emulators">Various Emulators for Teachers</a> (Sep-Dec 2025) — 3D mechanical simulators for school</li>
+                <li><a href="projects.html#redditzilla">Redditzilla</a> (2025) — Automated Reddit video generator</li>
+                <li><a href="projects.html#empty-character">Empty Character</a> (2021) — Empty character app on the Play Store</li>
+                <li><a href="projects.html#phone-credit">Phone Credit App</a> (2020) — Unofficial carrier client that hit ~26k installs</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Various Links</h2>
+            <ul>
+                <li><a href="https://github.com/OverloadedTech" target="_blank">GitHub</a></li>
+                <li><a href="https://bw.lucazani.com" target="_blank">BananaWiki Site</a></li>
+                <li><a href="https://emptycharacterapp.web.app" target="_blank">Empty Character Site</a></li>
+                <li><a href="https://linkedin.com/in/OverloadedTech" target="_blank">LinkedIn (You don't want to go there, right?)</a></li>
+                <li><a href="https://reddit.com/u/OverloadedTech" target="_blank">Reddit</a></li>
+                <li><a href="https://github.com/OverloadedTech/website" target="_blank">This site's source code (GitHub)</a></li>
+                <li><a href="contact.html">Contact Me</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>© <span id="year"></span> Luca Zani | Licensed under <a href="./LICENSE" target="_blank" rel="noopener noreferrer">MIT</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+        function calculateAge() {
+            const birthDate = new Date(2008, 7, 18);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+        document.getElementById('age').textContent = calculateAge();
+    </script>
+</body>
+</html>

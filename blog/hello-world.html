@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hello World - first blog post">
+    <title>Hello World - Luca Zani</title>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../">lucazani.com</a>
+            <a href="../projects.html">projects</a>
+            <a href="./">blog</a>
+            <a href="../contact.html">contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <article>
+            <p class="small">May 25, 2026</p>
+            <h1>Hello World</h1>
+            <p>i made a blog. don't expect consistency, i'll write when i feel like it. probably about things i'm building, things i break, or random stuff i find interesting.</p>
+            <p>first post is this one. very meta, i know.</p>
+        </article>
+    </main>
+
+    <footer>
+        <p><a href="./" class="btn">← back to blog</a></p>
+        <p>© <span id="year"></span> Luca Zani | Licensed under <a href="../LICENSE" target="_blank" rel="noopener noreferrer">MIT</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
