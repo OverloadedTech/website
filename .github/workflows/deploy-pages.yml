@@ -19,15 +19,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Stage static files
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Build static site
+        env:
+          PAGES_BUILD: "1"
+          # For a custom domain (CNAME) leave BASE_PATH as "/".
+          # For https://<user>.github.io/<repo>/ set it to "/<repo>/".
+          BASE_PATH: "/"
+        run: bun run build:pages
+      - name: SPA fallback + no jekyll
         run: |
-          mkdir -p dist/posts
-          cp -r index.html projects.html blog.html likes.html contact.html 404.html styles.css os.js favicon.png robots.txt dist/
-          cp -r posts/*.html dist/posts/
-          touch dist/.nojekyll
+          cp dist/client/index.html dist/client/404.html
+          touch dist/client/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: dist/client
 
   deploy:
     needs: build

@@ -2,30 +2,37 @@
 
 Personal site with a small browser-based OS layer (desktop, terminal, kiosk mode).
 
-## What this is
-
-A plain static site. No framework, no build step. Every page is a hand-written
-HTML file that loads `styles.css` and `os.js` from the repo root; `os.js` adds the
-desktop/terminal/kiosk layer on top of any page.
-
-## Structure
-
-- `index.html`, `projects.html`, `blog.html`, `likes.html`, `contact.html` - the pages
-- `posts/*.html` - blog posts (kept in this folder so `web`/`posts/*` can resolve)
-- `os.js` - the OS layer (desktop, windows, terminal, kiosk, duck)
-- `styles.css` - all styles (site + OS)
-- `favicon.png`, `robots.txt`
-- `.github/workflows/deploy-pages.yml` - static deploy to GitHub Pages
-
-## Local preview
+## Development
 
 ```sh
-python3 -m http.server
+bun install
+bun run dev
 ```
 
-or any static file server that supports directory traversal.
+## Builds
 
-## Deploy
+```sh
+bun run build          # standard build
+bun run build:pages    # static prerender for a web host (GitHub Pages, Netlify, ...)
+bun run build:file     # standalone HTML files you can double-click (no server needed)
+bun run serve:pages    # serve dist/client over HTTP locally
+```
 
-The GitHub Pages workflow copies the HTML, CSS, JS and posts into a temporary
-`dist` folder and uploads it. No build step required.
+`build:file` inlines every script, stylesheet and image into each `.html`, and the
+router falls back to hash URLs when the page is opened over `file://`.
+
+## Deploy to GitHub Pages
+
+1. Push this repo to GitHub.
+2. Settings -> Pages -> Source: **GitHub Actions**.
+3. In `.github/workflows/deploy-pages.yml` set `BASE_PATH`:
+   - custom domain or `<user>.github.io` repo: `"/"`
+   - project site at `https://<user>.github.io/<repo>/`: `"/<repo>/"`
+4. Push to `main`. The workflow builds and publishes `dist/client`.
+
+## Built with
+
+- TanStack Start
+- TypeScript
+- React
+- Tailwind CSS
