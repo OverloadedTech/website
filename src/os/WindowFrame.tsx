@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { clampGeom, closeWindow, focusWindow, updateWindow, useOs, type WinState } from "./store";
-import { elAngle, unspinAround, unspinDeltaBy } from "./spin";
+import { elAngle, unspinDeltaBy } from "./spin";
 import { spinClass, spinStyle } from "./SpinBox";
 
 
@@ -165,18 +165,17 @@ export function WindowFrame({
     // each window turns around its own centre, so un-rotate pointer maths
     // about that same centre (rotation leaves the centre where it is)
     const ang = () => elAngle(boxRef.current);
-    const P = (e: { clientX: number; clientY: number }) => {
-      const deg = ang();
-      if (!deg || !boxRef.current) return { x: e.clientX, y: e.clientY };
-      const r = boxRef.current.getBoundingClientRect();
-      return unspinAround(e.clientX, e.clientY, deg, r.left + r.width / 2, r.top + r.height / 2);
-    };
     const D = (dx: number, dy: number) => unspinDeltaBy(dx, dy, ang());
 
     const move = (e: PointerEvent) => {
       const d = drag.current;
       if (!d) return;
-      const delta = D(e.clientX - d.sx, e.clientY - d.sy);
+      // a window turns around its own centre, so its centre follows the raw
+      // pointer delta: moving must NOT be un-rotated. Only resizing, which runs
+      // along the window's own (rotated) edges, needs the un-spin maths.
+      const rawDx = e.clientX - d.sx;
+      const rawDy = e.clientY - d.sy;
+      const delta = d.mode === "move" ? { x: rawDx, y: rawDy } : D(rawDx, rawDy);
       let dx = delta.x;
       let dy = delta.y;
       // ignore jitter: nothing happens until the pointer clears a small threshold
@@ -186,12 +185,11 @@ export function WindowFrame({
         if (d.tearOff) {
           // tear a maximized / snapped window off: restore its size under the cursor
           const r = restore.current;
-          const p = P(e);
           d.start = {
             w: r.w,
             h: r.h,
-            x: Math.round(p.x - r.w / 2),
-            y: Math.max(chromeTop(), Math.round(p.y - 16)),
+            x: Math.round(e.clientX - r.w / 2),
+            y: Math.max(chromeTop(), Math.round(e.clientY - 16)),
           };
           d.sx = e.clientX;
           d.sy = e.clientY;
@@ -209,8 +207,8 @@ export function WindowFrame({
       switch (d.mode) {
         case "move": {
           next = { ...s, x: s.x + dx, y: s.y + dy };
-          const p = P(e);
-          const z = zoneFor(p.x, p.y);
+          // snap zones are screen edges, so they live in raw client space
+          const z = zoneFor(e.clientX, e.clientY);
           snapRef.current = z;
           setSnap(z);
           break;
