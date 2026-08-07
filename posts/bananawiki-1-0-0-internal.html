@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BananaWiki 1.0.0 (internal) - Luca Zani</title>
+  <meta
+    name="description"
+    content="The first version I'm willing to call 1.0.0. Internal only, but the whole thing finally holds together."
+  />
+  <meta property="og:title" content="BananaWiki 1.0.0 (internal) - Luca Zani" />
+  <meta property="og:description" content="The first version I'm willing to call 1.0.0. Internal only, but the whole thing finally holds together." />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+  />
+  <link rel="icon" href="../favicon.png" type="image/png" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <div class="spin-root">
+    <div class="page">
+      <header class="site">
+        <nav class="site">
+          <div class="nav-links">
+            <a href="../index.html"><span class="nav-long">lucazani.com</span><span class="nav-short">home</span></a>
+            <a href="../projects.html">projects</a>
+            <a href="../blog.html" data-active aria-current="page">blog</a>
+            <a href="../likes.html">likes</a>
+            <a href="../contact.html">contact</a>
+          </div>
+          <div class="nav-side">
+            <a
+              class="nav-github"
+              href="https://github.com/OverloadedTech"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="github"
+              aria-label="github"
+            >
+              <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
+                <path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38l-.01-1.34c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.1.82a7.4 7.4 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.19c0 .21.15.46.55.38A8 8 0 0 0 8 0Z" />
+              </svg>
+            </a>
+            <button class="duck-btn" type="button" title="escape?" aria-label="open terminal">
+              <span class="duck-mini" role="img" aria-hidden>🦆</span>
+              <span class="say">escape?</span>
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <article>
+          <span class="post-date">4 June 2026</span>
+<h1>BananaWiki 1.0.0 (internal)</h1>
+          <p>
+            BananaWiki hit <strong>1.0.0</strong> today. Internal release, no signups, no public
+            instance yet - but every piece of the thing works at the same time, which has not been
+            true for the last four months.
+          </p>
+          <p>
+            Short recap for whoever landed here by accident: BananaWiki is a Flask platform where you
+            make your own wiki. Markdown pages, private or public spaces, users with roles, and a
+            plugin system that carries the interesting parts - mind maps, Kanban boards, canvas, chat.
+          </p>
+          <h2>Where it stands</h2>
+          <figure>
+            <svg viewBox="0 0 100 58" width="100%" role="img" aria-label="Feature surface at 1.0.0 (internal build)">
+              <g transform="translate(0 2)">
+                <text x="0" y="5" fontSize="4" fill="var(--muted)">plugins shipped</text>
+                <rect x="0" y="7" width="100" height="4" fill="var(--border-soft)" />
+                <rect x="0" y="7" width="100" height="4" fill="var(--accent)" />
+                <text x="100" y="5" fontSize="4" fill="var(--fg)" textAnchor="end">33</text>
+              </g>
+              <g transform="translate(0 16)">
+                <text x="0" y="5" fontSize="4" fill="var(--muted)">role levels</text>
+                <rect x="0" y="7" width="100" height="4" fill="var(--border-soft)" />
+                <rect x="0" y="7" width="18.18" height="4" fill="var(--accent)" />
+                <text x="100" y="5" fontSize="4" fill="var(--fg)" textAnchor="end">6</text>
+              </g>
+              <g transform="translate(0 30)">
+                <text x="0" y="5" fontSize="4" fill="var(--muted)">editor modes</text>
+                <rect x="0" y="7" width="100" height="4" fill="var(--border-soft)" />
+                <rect x="0" y="7" width="9.09" height="4" fill="var(--accent)" />
+                <text x="100" y="5" fontSize="4" fill="var(--fg)" textAnchor="end">3</text>
+              </g>
+              <g transform="translate(0 44)">
+                <text x="0" y="5" fontSize="4" fill="var(--muted)">export formats</text>
+                <rect x="0" y="7" width="100" height="4" fill="var(--border-soft)" />
+                <rect x="0" y="7" width="12.12" height="4" fill="var(--accent)" />
+                <text x="100" y="5" fontSize="4" fill="var(--fg)" textAnchor="end">4</text>
+              </g>
+            </svg>
+            <figcaption>Feature surface at 1.0.0 (internal build)</figcaption>
+          </figure>
+<p>
+            The plugin count is the number I care about. Everything past the wiki core is a plugin,
+            including the boring built-ins, so the core stays small and anything I regret can be
+            deleted without surgery.
+          </p>
+          <figure>
+            <svg viewBox="0 0 100 34" width="100%" role="img" aria-label="Rough page-render latency over the 1.0.0 cycle (ms, self-measured, one box)">
+              <path d="M 0.00 2.00 L 25.00 9.33 L 50.00 12.67 L 75.00 18.00 L 100.00 23.67" fill="none" stroke="var(--accent)" strokeWidth="0.8" />
+              <circle cx="0" cy="2" r="0.9" fill="var(--accent-dim)" />
+              <circle cx="25" cy="9.33" r="0.9" fill="var(--accent-dim)" />
+              <circle cx="50" cy="12.67" r="0.9" fill="var(--accent-dim)" />
+              <circle cx="75" cy="18" r="0.9" fill="var(--accent-dim)" />
+              <circle cx="100" cy="23.67" r="0.9" fill="var(--accent-dim)" />
+              <text x="0" y="33.5" fontSize="2.6" fill="var(--faint)" textAnchor="start">feb</text>
+              <text x="25" y="33.5" fontSize="2.6" fill="var(--faint)" textAnchor="middle">mar</text>
+              <text x="50" y="33.5" fontSize="2.6" fill="var(--faint)" textAnchor="middle">apr</text>
+              <text x="75" y="33.5" fontSize="2.6" fill="var(--faint)" textAnchor="middle">may</text>
+              <text x="100" y="33.5" fontSize="2.6" fill="var(--faint)" textAnchor="end">jun</text>
+            </svg>
+            <figcaption>Rough page-render latency over the 1.0.0 cycle (ms, self-measured, one box)</figcaption>
+          </figure>
+          <p>
+            Most of that drop is not clever engineering, it&apos;s me removing things I should never
+            have written. Caching helped. Deleting three abstraction layers helped more.
+          </p>
+          <h2>What 1.0.0 does not mean</h2>
+          <ul>
+            <li>it is not hosted for anyone but me</li>
+            <li>it is not open source yet</li>
+            <li>it is not stable under people who actively want to break it</li>
+          </ul>
+          <p>
+            It means the version number stops pretending. Next step is putting it somewhere other
+            people can reach.
+          </p>
+        </article>
+        <p>
+          <a href="../blog.html" class="btn">← all posts</a>
+        </p>
+      </main>
+
+      <footer class="site">
+        <p>
+          © 2026 Luca Zani | Licensed under
+          <a href="https://github.com/OverloadedTech/website/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT</a>
+          |
+          <a href="https://github.com/OverloadedTech/website" target="_blank" rel="noopener noreferrer">source</a>
+        </p>
+        <p class="creed">Roses are red, violets are blue, McAfee didn&apos;t kill himself, and neither should you.</p>
+      </footer>
+    </div>
+  </div>
+  <script src="../os.js"></script>
+</body>
+</html>

@@ -1,41 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="404 - Page not found">
-    <title>404 - Luca Zani</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 - Luca Zani</title>
+  <meta name="description" content="That page isn't here." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+  />
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/">lucazani.com</a>
-            <a href="projects.html">projects</a>
-            <a href="blog/">blog</a>
-            <a href="contact.html">contact</a>
-            <a href="https://github.com/OverloadedTech" target="_blank">github</a>
-        </nav>
-    </header>
-
-    <main>
-        <section>
-            <h1>404</h1>
-            <p>Looks like you found the secret level where nothing exists yet.</p>
-            <p>Maybe the page took a coffee break, try heading <a href="/">back home</a> or send me an email if you think it's missing.</p>
-        </section>
-    </main>
-
-    <footer>
-        <p>© <span id="year"></span> Luca Zani | Licensed under <a href="./LICENSE" target="_blank" rel="noopener noreferrer">MIT</a> | <a href="https://github.com/OverloadedTech/website" target="_blank" rel="noopener noreferrer">source</a></p>
-    </footer>
-
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+  <div class="spin-root">
+    <div class="page notice">
+      <h1>404</h1>
+      <p>That page isn&apos;t here. It either never existed or I deleted it.</p>
+      <p>
+        <a href="index.html" class="btn">← back to homepage</a>
+      </p>
+    </div>
+  </div>
+  <script src="os.js"></script>
 </body>
 </html>

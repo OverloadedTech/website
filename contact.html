@@ -1,46 +1,150 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Contact Luca Zani">
-    <title>Contact - Luca Zani</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact - Luca Zani</title>
+  <meta
+    name="description"
+    content="Email is the only contact method that matters. What I want in my inbox, what I don't, and the languages I speak."
+  />
+  <meta property="og:title" content="Contact - Luca Zani" />
+  <meta property="og:description" content="Just email me." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+  />
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/">lucazani.com</a>
+  <div class="spin-root">
+    <div class="page">
+      <header class="site">
+        <nav class="site">
+          <div class="nav-links">
+            <a href="index.html"><span class="nav-long">lucazani.com</span><span class="nav-short">home</span></a>
             <a href="projects.html">projects</a>
-            <a href="blog/">blog</a>
-            <a href="contact.html">contact</a>
-            <a href="https://github.com/OverloadedTech" target="_blank">github</a>
+            <a href="blog.html">blog</a>
+            <a href="likes.html">likes</a>
+            <a href="contact.html" data-active aria-current="page">contact</a>
+          </div>
+          <div class="nav-side">
+            <a
+              class="nav-github"
+              href="https://github.com/OverloadedTech"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="github"
+              aria-label="github"
+            >
+              <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
+                <path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38l-.01-1.34c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.19c0 .21.15.46.55.38A8 8 0 0 0 8 0Z" />
+              </svg>
+            </a>
+            <button class="duck-btn" type="button" title="escape?" aria-label="open terminal">
+              <span class="duck-mini" role="img" aria-hidden>🦆</span>
+              <span class="say">escape?</span>
+            </button>
+          </div>
         </nav>
-    </header>
-    <main>
-        <section>
-            <h1>Contact</h1>
-            <p><strong>Email:</strong> luca (at) lucazani (dot) com</p>
-        </section>
-        <section>
-            <h2>Email me anytime</h2>
-            <p>Seriously, just email me for anything. Code questions, project ideas, memes, tech discussions, or just to say hi. I'm happy to chat.</p>
-            <p>I only listed my email as the only contact method because i think email is the only universal and "best" way to communicate online. But if you prefer to reach me elsewhere, feel free to look me up under OverloadedTech on socials such as Reddit, Telegram, X or LinkedIn (ugh, who uses that, awful!) but i might take a little longer to respond</p>
-            <p>Commercial, non-commercial, dumb, whatever. I don't care about formality, just write like a normal person.</p>
-            <p>(unless it's spam or anything intended to be clearly EVIL!!!™)</p>
-        </section>
-    </main>
+      </header>
 
-    <footer>
-        <p><a href="/" class="btn">← back to homepage</a></p>
-        <p>© <span id="year"></span> Luca Zani | Licensed under <a href="./LICENSE" target="_blank" rel="noopener noreferrer">MIT</a> | <a href="https://github.com/OverloadedTech/website" target="_blank" rel="noopener noreferrer">source</a></p>
-    </footer>
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+      <main>
+        <section>
+          <h1>Contact</h1>
+          <p>
+            <strong>Email:</strong> luca (at) lucazani (dot) com
+          </p>
+          <p>
+            <strong>Matrix:</strong>&nbsp;
+            <a href="https://matrix.to/#/@ovtd:matrix.org" target="_blank" rel="noopener noreferrer">
+              @ovtd:matrix.org
+            </a>&nbsp;- I can read messages there, but you&apos;ll make me work harder than if you just email
+            me.
+          </p>
+        </section>
+
+        <section>
+          <h2>Email me anytime</h2>
+          <p>
+            Seriously, just email me for anything. Code questions, project ideas, memes, tech
+            discussions, or just to say hi. I&apos;m happy to chat.
+          </p>
+          <p>
+            I only listed my email as the only contact method because i think email is the only
+            universal and &quot;best&quot; way to communicate online. But if you prefer to reach me
+            elsewhere, feel free to look me up under OverloadedTech on socials such as Reddit,
+            Telegram, X or LinkedIn (ugh, who uses that, awful!) but i might take a little longer
+            to respond
+          </p>
+          <p>
+            Commercial, non-commercial, dumb, whatever. I don&apos;t care about formality.
+          </p>
+        </section>
+
+        <section>
+          <h2>What I want in my inbox</h2>
+          <ul class="plain">
+            <li><span class="yes">✓</span> questions about my projects, my code, or something I wrote</li>
+            <li><span class="yes">✓</span> bug reports, including the annoying pedantic ones</li>
+            <li><span class="yes">✓</span> project ideas, collaborations, &quot;could this be built&quot;</li>
+            <li><span class="yes">✓</span> work: commercial or not, small or not</li>
+            <li><span class="yes">✓</span> corrections when I&apos;m wrong about something</li>
+            <li><span class="yes">✓</span> memes, weird links, &quot;hi&quot;</li>
+            <li>
+              <span class="yes">✓</span> legal threats: yes, really. send them straight to me by
+              email. I read them, I answer them, and I&apos;d much rather deal with a lawyer in my
+              inbox than anywhere else. see the note at the bottom of the projects page - I&apos;d
+              much rather you&apos;d shoot me an email than shoot me in real life
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>What I don&apos;t</h2>
+          <ul class="plain">
+            <li><span class="no">✗</span> spam, and anything intended to be clearly EVIL!!!™</li>
+            <li>
+              <span class="no">✗</span> SEO offers, backlink schemes, &quot;I noticed your
+              website...&quot;
+            </li>
+            <li>
+              <span class="no">✗</span> crypto, NFTs, and whatever the current version of that is
+            </li>
+            <li>
+              <span class="no">✗</span> recruiter mail with no role, no company and no salary
+            </li>
+            <li>
+              <span class="no">✗</span> six paragraphs of corporate throat-clearing before the ask
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Languages</h2>
+          <p>I speak Italian, German and English. Any of those three, go ahead.</p>
+          <p class="small">
+            You can write in another language too, of course - I&apos;ll just have to translate it,
+            and errors may happen. Don&apos;t be surprised if I answer something slightly beside the
+            point.
+          </p>
+        </section>
+      </main>
+
+      <footer class="site">
+        <p>
+          © 2026 Luca Zani | Licensed under
+          <a href="https://github.com/OverloadedTech/website/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT</a>
+          |
+          <a href="https://github.com/OverloadedTech/website" target="_blank" rel="noopener noreferrer">source</a>
+        </p>
+        <p class="creed">Roses are red, violets are blue, McAfee didn&apos;t kill himself, and neither should you.</p>
+      </footer>
+    </div>
+  </div>
+  <script src="os.js"></script>
 </body>
 </html>
