@@ -21,6 +21,24 @@ export function calcAge(): number {
   return age;
 }
 
+/** Site went live on 1 August 2021, when Luca was 13. */
+export const SITE_START_AGE = 13;
+
+export function isBirthday(d: Date = new Date()): boolean {
+  return d.getMonth() === 7 && d.getDate() === 18;
+}
+
+/** 13, 14, 15, ..., real age */
+export function ageSequence(real: number): (number | "...")[] {
+  const seq: (number | "...")[] = [];
+  for (let a = SITE_START_AGE; a < Math.min(real, SITE_START_AGE + 3); a++) seq.push(a);
+  if (!seq.includes(real)) {
+    seq.push("...");
+    seq.push(real);
+  }
+  return seq;
+}
+
 export const DUCK_ASCII = `   __
  <(o )___
   ( ._> /

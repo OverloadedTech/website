@@ -873,3 +873,74 @@ pre.ascii {
 .page.notice h1 {
   margin-bottom: 8px;
 }
+
+
+/* birthday confetti */
+.confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.birthday-note {
+  border: 1px dashed currentColor;
+  padding: 8px 10px;
+  display: inline-block;
+}
+
+/* growing age counter */
+.age-counter .age-old,
+.age-counter .age-now,
+.age-counter .age-ellipsis {
+  display: inline-block;
+  animation: fade-in 0.25s ease-out;
+}
+
+.age-counter .age-old {
+  font-family: "Courier New", "Comic Sans MS", cursive, monospace;
+  opacity: 0.45;
+  transform: rotate(-9deg);
+  margin-right: 3px;
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.age-counter .age-old:nth-child(even) {
+  transform: rotate(7deg);
+}
+
+.age-counter .age-ellipsis {
+  color: var(--muted);
+  opacity: 0.7;
+  margin: 0 1px;
+  letter-spacing: 1px;
+  transform: translateY(-1px);
+  font-size: 0.9em;
+}
+
+.age-counter .age-now {
+  margin-left: 4px;
+  font-weight: bold;
+}
+
+/* highlighted site history section on projects */
+.site-history {
+  padding: 18px 18px 8px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  margin-bottom: 35px;
+}
+
+.site-history h2 {
+  color: var(--accent);
+  margin-top: 0;
+}
+
+.site-history p {
+  color: var(--fg);
+}

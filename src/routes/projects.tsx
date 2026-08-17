@@ -33,6 +33,15 @@ function Projects() {
         </p>
       </section>
 
+      <section id="this-site" className="site-history">
+        <h2>This Site</h2>
+        <p>
+          This site has gone through various iterations since 1 August 2021, under lucazani.com and
+          overloadedtech.com (i no longer control that one, so we remain on lucazani.com).
+        </p>
+        <p>I was 13 when it started. Damn... how time flies.</p>
+      </section>
+
       <section id="opensource">
         <h2>Open Source</h2>
         <p>
@@ -150,7 +159,6 @@ function Projects() {
           maybe 2D, maybe 3D but only time will tell
         </p>
       </section>
-
 
       <section>
         <h2>Older Projects</h2>

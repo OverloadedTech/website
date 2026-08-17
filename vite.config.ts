@@ -10,6 +10,7 @@ export default defineConfig({
     ? {
         vite: {
           base: BASE,
+          preview: { host: "127.0.0.1" },
           ...(FILE
             ? {
                 build: {

@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Layout } from "@/components/Layout";
-import { calcAge } from "@/lib/site";
+import { AgeCounter } from "@/components/AgeCounter";
+import { Confetti } from "@/components/Confetti";
+import { BirthdayNote } from "@/components/BirthdayNote";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,10 +26,12 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <Layout>
+      <Confetti />
       <section>
         <h1>Luca Zani</h1>
+        <BirthdayNote />
         <p>
-          {calcAge()} y/o developer from Bolzano, Italy. Backend-focused but full-stack when needed.
+          <AgeCounter /> y/o developer from Bolzano, Italy. Backend-focused but full-stack when needed.
           I write code, solder, 3D print, and build cool things.
         </p>
         <p className="small">(yes, the age is auto updated, check it out on 18 August midnight)</p>
