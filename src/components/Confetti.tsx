@@ -58,7 +58,7 @@ export function Confetti() {
     const tick = (now: number) => {
       const elapsed = now - start;
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      const fade = elapsed > 8000 ? Math.max(0, 1 - (elapsed - 8000) / 2000) : 1;
+      const fade = elapsed > 4000 ? Math.max(0, 1 - (elapsed - 4000) / 1000) : 1;
       ctx.globalAlpha = fade;
       for (const p of pieces) {
         p.x += p.vx;
@@ -75,7 +75,7 @@ export function Confetti() {
         ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
         ctx.restore();
       }
-      if (elapsed < 10000) raf = requestAnimationFrame(tick);
+      if (elapsed < 5000) raf = requestAnimationFrame(tick);
       else setActive(false);
     };
     raf = requestAnimationFrame(tick);
