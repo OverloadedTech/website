@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Backend-focused developer from Bolzano, Italy. BananaWiki, Wicked Agent, and a pile of experiments that never made it out.",
+          "Backend-focused developer from Bolzano, Italy. BananaWiki (now open source), Wicked Agent, and a pile of experiments that never made it out.",
       },
       { property: "og:title", content: "Luca Zani - developer from Bolzano" },
       {
@@ -46,13 +46,13 @@ function Index() {
         <div className="project">
           <h3>BananaWiki (2026)</h3>
           <p>
-            A private wiki platform: Markdown pages with history, Kanban boards, Canvas diagrams,
-            built-in chat and 33 toggleable plugins. Multi-tenant hosting, EU data, free and
-            non-commercial. Independent project living at{" "}
+            A private wiki platform: Markdown pages with history and 19 built-in plugins, including
+            Kanban boards, Canvas diagrams and chat. Open source (AGPL) since September 2026: run it
+            yourself, or use the hosted version at{" "}
             <a href="https://bananawiki.com" target="_blank" rel="noopener noreferrer">
               bananawiki.com
-            </a>
-            .
+            </a>{" "}
+            when it&apos;s open. BananaChat and BananaVibe, two smaller tools, grew next to it.
           </p>
 
           <Link to="/projects" hash="bananawiki" className="btn">
@@ -73,7 +73,7 @@ function Index() {
 
         <div className="project">
           <h3>Unnamed Engine</h3>
-          <p>A game engine experiment. Still learning, still exploring.</p>
+          <p>A game engine experiment.</p>
           <Link to="/projects" hash="unnamed-engine" className="btn">
             read more →
           </Link>
@@ -96,7 +96,7 @@ function Index() {
         <p>
           90-95% of what I build is an experiment. Simple or complex, most of it ends up archived or
           deleted internally, because I only publish work I consider pseudo-significant. Sorry about
-          that - it&apos;s something I&apos;m trying to get better at.
+          that. It&apos;s something I&apos;m trying to get better at.
         </p>
       </section>
 
@@ -107,25 +107,25 @@ function Index() {
             <Link to="/projects" hash="emulators">
               Various Emulators for Teachers
             </Link>{" "}
-            (Sep-Dec 2025) - 3D mechanical simulators for school
+            (Sep-Dec 2025): 3D mechanical simulators for school
           </li>
           <li>
             <Link to="/projects" hash="redditzilla">
               Redditzilla
             </Link>{" "}
-            (2025) - Automated Reddit video generator
+            (2025): automated Reddit video generator
           </li>
           <li>
             <Link to="/projects" hash="empty-character">
               Empty Character
             </Link>{" "}
-            (2021) - Empty character app on the Play Store
+            (2021): empty character app on the Play Store
           </li>
           <li>
             <Link to="/projects" hash="phone-credit">
               Phone Credit App
             </Link>{" "}
-            (2020) - Unofficial carrier client that hit ~26k installs
+            (2020): unofficial carrier client that hit ~26k installs
           </li>
         </ul>
       </section>
@@ -136,6 +136,11 @@ function Index() {
           <li>
             <a href="https://bananawiki.com" target="_blank" rel="noopener noreferrer">
               BananaWiki
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/BananaSuite" target="_blank" rel="noopener noreferrer">
+              Banana Suite on GitHub
             </a>
           </li>
           <li>

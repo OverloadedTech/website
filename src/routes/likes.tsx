@@ -151,7 +151,7 @@ function Likes() {
       <section>
         <h2>Tech</h2>
         <p>
-          I like technology that works well. I praise the machine and I praise automation - what I
+          I like technology that works well. I praise the machine and I praise automation. What I
           don&apos;t like is AI taking executive decisions instead of humans. IBM put it better than
           I can, back in 1979:{" "}
           <strong>
@@ -161,7 +161,7 @@ function Likes() {
           That slide is older than most people currently ignoring it.
         </p>
         <p>
-          I like and support open software. Directly, not as an aesthetic - orgs like the{" "}
+          I like open software and I support it directly. Orgs like the{" "}
           <a href="https://www.fsf.org/" target="_blank" rel="noopener noreferrer">
             FSF
           </a>{" "}
@@ -169,28 +169,20 @@ function Likes() {
           <a href="https://www.eff.org/" target="_blank" rel="noopener noreferrer">
             EFF
           </a>{" "}
-          do work that matters and they should be supported by people who benefit from it.
+          do work that matters, and the people who benefit from it should support them.
         </p>
         <p>
-          I doubt everything as a principle. Governments, secret services, companies, other people -
-          and my own things too, including the ones where doubting is against my interests. Talking
-          is cheap. Facts are the real thing.
+          I doubt everything as a principle. Governments, secret services, companies, other people,
+          and my own things too, including the ones where doubting is against my interests.
         </p>
       </section>
 
       <section>
         <h2>Setup</h2>
-        <ul>
-          <li>
-            <strong>Phone</strong> - Nothing Phone (3a)
-          </li>
-          <li>
-            <strong>Laptop</strong> - MacBook Air M4
-          </li>
-          <li>
-            <strong>Desktop</strong> - a docked Steam Deck
-          </li>
-        </ul>
+        <p>
+          My phone is a Nothing Phone (3a), my laptop is a MacBook Air M4, and my desktop is a
+          docked Steam Deck.
+        </p>
         <p className="small">
           Yes, a Steam Deck. It sits in a dock, it runs SteamOS, and it does software development
           perfectly well. And gaming, obviously. It&apos;s a Linux box with a handle.
@@ -202,8 +194,8 @@ function Likes() {
         <h2>Private money</h2>
         <p>
           I like tools that let people exchange and store value without
-          surveillance or permission. Monero, in particular: real digital
-          cash without surveillance or gatekeepers.
+          surveillance or permission. Monero in particular, because it is
+          real digital cash.
         </p>
       </section>
 

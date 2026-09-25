@@ -49,13 +49,23 @@ export function SiteHeader() {
         </div>
 
         <div className="nav-side">
+          {/* placeholder until the CV exists; aria-disabled keeps the tooltip working */}
+          <button
+            type="button"
+            className="nav-cv"
+            aria-disabled="true"
+            title="CV coming soon"
+            aria-label="CV, coming soon"
+          >
+            CV
+          </button>
           <a
             className="nav-github"
-            href="https://github.com/OverloadedTech"
+            href="https://github.com/OverloadedTech/website"
             target="_blank"
             rel="noopener noreferrer"
-            title="github"
-            aria-label="github"
+            title="source of this site on github"
+            aria-label="source of this site on github"
           >
             <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden>
               <path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38l-.01-1.34c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.19c0 .21.15.46.55.38A8 8 0 0 0 8 0Z" />

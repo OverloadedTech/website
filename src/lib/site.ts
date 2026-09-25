@@ -21,22 +21,28 @@ export function calcAge(): number {
   return age;
 }
 
-/** Site went live on 1 August 2021, when Luca was 13. */
+/** Site went live on 1 August 2021, a few weeks before Luca turned 13. */
 export const SITE_START_AGE = 13;
 
 export function isBirthday(d: Date = new Date()): boolean {
   return d.getMonth() === 7 && d.getDate() === 18;
 }
 
-/** 13, 14, 15, ..., real age */
-export function ageSequence(real: number): (number | "...")[] {
-  const seq: (number | "...")[] = [];
-  for (let a = SITE_START_AGE; a < Math.min(real, SITE_START_AGE + 3); a++) seq.push(a);
-  if (!seq.includes(real)) {
-    seq.push("...");
-    seq.push(real);
-  }
+/** Every age from 13 up to the real one: 13, 14, 15, 16, ... */
+export function ageSequence(real: number): number[] {
+  const seq: number[] = [];
+  for (let a = SITE_START_AGE; a <= Math.max(real, SITE_START_AGE); a++) seq.push(a);
   return seq;
+}
+
+/**
+ * How long to wait before showing the next age. Random, so the count
+ * stumbles upward instead of ticking like a clock; the last step waits a
+ * little longer so the real age lands on its own beat.
+ */
+export function ageStepDelay(isLastStep: boolean, random: () => number = Math.random): number {
+  const [min, max] = isLastStep ? [550, 900] : [160, 620];
+  return Math.round(min + random() * (max - min));
 }
 
 export const DUCK_ASCII = `   __

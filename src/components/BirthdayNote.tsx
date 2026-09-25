@@ -13,7 +13,7 @@ export function BirthdayNote() {
 
   return (
     <p className="birthday-note">
-      🎉 it&apos;s 18 August, which means it&apos;s my birthday — {age} today. thanks for stopping by.
+      🎉 it&apos;s 18 August, which means it&apos;s my birthday: {age} today. thanks for stopping by.
     </p>
   );
 }

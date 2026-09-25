@@ -8,7 +8,7 @@ export const Route = createFileRoute("/projects")({
       {
         name: "description",
         content:
-          "BananaWiki, Wicked Agent, an unnamed game engine, and the older stuff: emulators, Redditzilla, Empty Character, a carrier app with 26k installs.",
+          "BananaWiki and the Banana Suite, Wicked Agent, an unnamed game engine, and the older stuff: emulators, Redditzilla, Empty Character, a carrier app with 26k installs.",
       },
       { property: "og:title", content: "Projects - Luca Zani" },
       {
@@ -39,7 +39,7 @@ function Projects() {
           This site has gone through various iterations since 1 August 2021, under lucazani.com and
           overloadedtech.com (i no longer control that one, so we remain on lucazani.com).
         </p>
-        <p>I was 13 when it started. Damn... how time flies.</p>
+        <p>I was about to turn 13 when it started. Damn... how time flies.</p>
       </section>
 
       <section id="opensource">
@@ -55,53 +55,56 @@ function Projects() {
           GitHub are mostly older projects and experiments i built years ago (2020ish-2024)
         </p>
         <p>I&apos;d like to come back and help with FOSS as soon as i can once i get a bit of free time.</p>
+        <p>
+          Update, September 2026: BananaWiki, BananaChat and BananaVibe are now open source, in the{" "}
+          <a href="https://github.com/BananaSuite" target="_blank" rel="noopener noreferrer">
+            BananaSuite
+          </a>{" "}
+          organization. More in{" "}
+          <Link to="/blog/$slug" params={{ slug: "banana-suite-open-source" }}>
+            the announcement
+          </Link>
+          .
+        </p>
       </section>
 
       <section id="bananawiki">
         <h2>BananaWiki (2026)</h2>
         <p>
-          BananaWiki is both an open technology project and a managed hosting platform. It started
-          in February 2026 as a small Flask and SQLite app: a private wiki a small team could
-          actually run without maintaining a stack or paying for four different SaaS products.
+          BananaWiki is a private wiki that can also run as a hosting platform. I started it on my
+          own on 20 February 2026, because Canalescuola needed a wiki for the Officina Tecnologica
+          project, and it began as a small Flask and SQLite app.
         </p>
         <p>
-          At its centre is a private wiki with a Markdown editor and live preview, categories,
-          permissions, drafts, file uploads and full revision history. Around it there are Kanban
-          boards with priorities, assignees, due dates and attachments, Canvas diagrams that link
-          nodes to pages, images, videos and external URLs, built-in chat with DMs and channels,
-          and 33 plugins (assessments, badges, video meetings, text-to-speech, CAD viewer, AI
-          assistant and more) that can be toggled without restarting anything.
+          The wiki itself has a Markdown editor with live preview, categories, permissions, drafts,
+          file uploads and full revision history. The rest comes from 19 built-in plugins an admin
+          can switch on or off: Kanban boards with priorities, assignees, due dates and attachments,
+          Canvas diagrams that link nodes to pages, chat with direct messages and groups,
+          assessments, badges, text-to-speech, announcements, page protection, a REST API and more.
         </p>
         <p>
           By April 2026 the editor, auth, history and admin tools had grown into a real platform
           with the plugin system, boards and canvas. In May the multi-tenant hosting launched, so
-          you can spin up an isolated wiki in seconds, and a full Italian interface followed. June
-          brought owner controls, Easy Wiki mode, developer tools, operational safeguards and an
-          automated test suite. In July it moved to bananawiki.com with a redesigned public site,
-          hosting portal and proper legal documentation.
+          you can spin up an isolated wiki in seconds, and a full Italian interface followed. In
+          June the FSL sped everything up: text-to-speech moved to Piper, and owner controls,
+          EasyWiki mode and developer tools followed. In July it moved to bananawiki.com with a
+          redesigned public site, hosting portal and proper legal documentation.
         </p>
         <p>
-          It runs at{" "}
-          <a href="https://hosting.bananawiki.com" target="_blank" rel="noopener noreferrer">
-            hosting.bananawiki.com
-          </a>{" "}
-          with isolated environments per wiki, operational backups and EU data storage. Private by
-          default: anonymous access and higher-risk features need deliberate approval. No ads, no
-          data selling, no tracking business model. BananaWiki is{" "}
-          <strong>free and non-commercial</strong> for personal, educational and team use;
-          commercial use needs prior arrangement. A self-hosted deployment path is the plan.
-        </p>
-        <p>
-          It started as a PCTO (School-Work Program) with Canalescuola, who provided the framework
-          and the opportunity, and we still collaborate on BananaAI, a sovereign local AI platform
-          for internal use. Dino Michele Barone contributes ideas, feature plans and testing, and
-          donated the VPS hosting from 25 February to 10 July 2026 that carried the project through
-          its early development. After the PCTO ended,{" "}
-          <strong>BananaWiki became independent</strong> and lives at{" "}
+          Since September 2026 it&apos;s free software under the AGPL, maintained by me and Officina
+          Tecnologica. The hosted version at{" "}
           <a href="https://bananawiki.com" target="_blank" rel="noopener noreferrer">
             bananawiki.com
           </a>{" "}
-          (the old bw.lucazani.com redirects there).
+          runs the same code (sometimes it&apos;s open to the public, sometimes it isn&apos;t), and
+          anyone can run it on their own server instead. Personal and commercial use are both fine.
+          No ads, no data selling.
+        </p>
+        <p>
+          Two smaller projects grew next to it. <strong>BananaChat</strong> started as BananaAI,
+          when I wanted to self-host AI models, and is now a separate way to try a local language
+          model. <strong>BananaVibe</strong> is what I use to try features quickly and keep up with
+          maintenance: it works from an issue and stops at a draft pull request that I review.
         </p>
         <p>
           <a
@@ -111,10 +114,17 @@ function Projects() {
             className="btn"
           >
             visit BananaWiki →
+          </a>{" "}
+          <a
+            href="https://github.com/BananaSuite"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn"
+          >
+            source on GitHub →
           </a>
         </p>
       </section>
-
 
       <section id="wicked-agent">
         <h2>Wicked Agent</h2>
@@ -199,7 +209,7 @@ function Projects() {
           any usable corpus for it and half of it changes from valley to valley.
         </p>
         <p>
-          I started it internally and it went up abandoned in June 2023. The idea was there, the
+          I started it internally and it ended up abandoned in June 2023. The idea was there, the
           execution wasn&apos;t: i was mapping words with a dictionary approach and a pile of rules,
           which works for single terms and falls apart the moment you feed it a real sentence. I
           didn&apos;t have the experience or the tooling to do it properly, so it quietly died.

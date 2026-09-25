@@ -298,7 +298,7 @@ function kbNodes(): KbNode[] {
     { t: "h3", v: "BananaWiki (2026)" },
     {
       t: "p",
-      v: "A private wiki platform: Markdown pages with history, Kanban boards, Canvas diagrams, built-in chat and 33 toggleable plugins.",
+      v: "A private wiki platform: Markdown pages with history and 19 built-in plugins, including Kanban boards, Canvas diagrams and chat. Open source since September 2026.",
     },
     { t: "btn", v: "read more →" },
     { t: "h3", v: "Wicked Agent" },

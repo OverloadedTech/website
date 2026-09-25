@@ -30,8 +30,8 @@ function Contact() {
           <a href="https://matrix.to/#/@ovtd:matrix.org" target="_blank" rel="noopener noreferrer">
             @ovtd:matrix.org
           </a>{" "}
-          - I can read messages there, but you&apos;ll make me work harder than
-          if you just email me.
+          (I can read messages there, but you&apos;ll make me work harder than
+          if you just email me)
         </p>
       </section>
 
@@ -78,7 +78,7 @@ function Contact() {
           <li>
             <span className="yes">✓</span> legal threats: yes, really. send them straight to me by
             email. I read them, I answer them, and I&apos;d much rather deal with a lawyer in my
-            inbox than anywhere else. see the note at the bottom of the projects page - I'd
+            inbox than anywhere else. see the note at the bottom of the projects page: I'd
             much rather you'd shoot me an email than shoot me in real life
           </li>
         </ul>
@@ -110,7 +110,7 @@ function Contact() {
         <h2>Languages</h2>
         <p>I speak Italian, German and English. Any of those three, go ahead.</p>
         <p className="small">
-          You can write in another language too, of course - I&apos;ll just have to translate it, and
+          You can write in another language too, of course. I&apos;ll just have to translate it, and
           errors may happen. Don&apos;t be surprised if I answer something slightly beside the point.
         </p>
       </section>
