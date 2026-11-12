@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { PAGES } from "@/lib/site";
 import { requestTerminal } from "@/os/actions";
 import { useOs } from "@/os/store";
+import { summonCvDuck } from "./CvDuck";
 
 
 // the duck reads better as an emoji than as three lines of mangled ASCII
@@ -49,13 +50,13 @@ export function SiteHeader() {
         </div>
 
         <div className="nav-side">
-          {/* placeholder until the CV exists; aria-disabled keeps the tooltip working */}
+          {/* placeholder until the CV exists: the duck apologises in person */}
           <button
             type="button"
             className="nav-cv"
-            aria-disabled="true"
-            title="CV coming soon"
-            aria-label="CV, coming soon"
+            onClick={(e) => summonCvDuck(e.currentTarget)}
+            title="CV - under construction"
+            aria-label="CV, still a work in progress"
           >
             CV
           </button>

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
+import { CvDuck } from "./CvDuck";
 
 export function Layout({ children, back = false }: { children: ReactNode; back?: boolean }) {
   return (
@@ -8,6 +9,7 @@ export function Layout({ children, back = false }: { children: ReactNode; back?:
       <SiteHeader />
       <main>{children}</main>
       <SiteFooter back={back} />
+      <CvDuck />
     </div>
   );
 }
