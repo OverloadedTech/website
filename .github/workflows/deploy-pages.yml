@@ -5,43 +5,72 @@ on:
     branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 concurrency:
-  group: pages
+  group: github-pages
   cancel-in-progress: true
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      - run: bun install --frozen-lockfile
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lock', 'bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
       - name: Build static site
         env:
           PAGES_BUILD: "1"
-          # For a custom domain (CNAME) leave BASE_PATH as "/".
-          # For https://<user>.github.io/<repo>/ set it to "/<repo>/".
+          # Custom domain: /
+          # Repository site: /<repository>/
           BASE_PATH: "/"
         run: bun run build:pages
-      - name: SPA fallback + no jekyll
+
+      - name: Prepare Pages artifact
         run: |
+          test -f dist/client/index.html
           cp dist/client/index.html dist/client/404.html
           touch dist/client/.nojekyll
-      - uses: actions/upload-pages-artifact@v3
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist/client
 
   deploy:
+    name: Deploy
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      pages: write
+      id-token: write
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
