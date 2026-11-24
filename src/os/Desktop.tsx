@@ -1,489 +1,387 @@
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import { DUCK_ASCII } from "@/lib/site";
-import { AppGlyph } from "./AppIcons";
-// The desktop never rotates (it lives outside the spin stage), so pointer
-// coordinates are already in layout space - no un-rotation needed.
-const pt = (e: { clientX: number; clientY: number }) => ({ x: e.clientX, y: e.clientY });
-const unspinDelta = (dx: number, dy: number) => ({ x: dx, y: dy });
-const layoutBox = (el: HTMLElement) => {
-  const r = el.getBoundingClientRect();
-  return { left: r.left, top: r.top, width: r.width, height: r.height };
-};
-
+import { useEffect, useRef, useState } from "preact/hooks";
+import { DUCK } from "./duck";
+import { Icon } from "./icons";
 import {
   closeWindow,
   focusWindow,
+  get,
   openWindow,
-  setState,
+  set,
   updateWindow,
   useOs,
-  type AppId,
-} from "./store";
+  type App,
+} from "./state";
 
-type IconDef = {
-  key: string;
-  label: string;
-  /** icon name resolved by AppGlyph */
-  glyph: string;
-  app: AppId;
-  url?: string;
-};
+type Item = { key: string; label: string; icon: string; app: App; url?: string };
 
-const ICONS: IconDef[] = [
-  { key: "terminal", label: "terminal", glyph: "terminal", app: "terminal" },
-  { key: "site", label: "Kiosk", glyph: "kiosk", app: "kiosk", url: "/" },
-  { key: "browser", label: "browser", glyph: "browser", app: "browser" },
-  { key: "editor", label: "mousepad", glyph: "editor", app: "editor" },
-  { key: "doom", label: "doom", glyph: "doom", app: "doom" },
-  { key: "taskmgr", label: "task manager", glyph: "taskmgr", app: "taskmgr" },
-  { key: "paint", label: "paint", glyph: "paint", app: "paint" },
-  { key: "cube", label: "geometry.gl", glyph: "cube3d", app: "cube3d" },
-  { key: "manual", label: "manual", glyph: "manual", app: "manual" },
+const APPS: Item[] = [
+  { key: "terminal", label: "terminal", icon: "terminal", app: "terminal" },
+  { key: "kiosk", label: "Kiosk", icon: "kiosk", app: "kiosk", url: "/" },
+  { key: "browser", label: "browser", icon: "browser", app: "browser" },
+  { key: "mousepad", label: "mousepad", icon: "mousepad", app: "mousepad" },
+  { key: "doom", label: "doom", icon: "doom", app: "doom" },
+  { key: "taskmgr", label: "task manager", icon: "taskmgr", app: "taskmgr" },
+  { key: "paint", label: "paint", icon: "paint", app: "paint" },
+  { key: "geometry", label: "geometry.gl", icon: "geometry", app: "geometry" },
+  { key: "manual", label: "manual", icon: "manual", app: "manual" },
 ];
-
 
 const COL = 100;
 const ROW = 96;
+const PER_COL = 6;
 
-type Ctx = { x: number; y: number; icon: IconDef | null };
-type Props = { icon: IconDef; body: [string, string][] };
+const fileItem = (name: string): Item => ({
+  key: "file:" + name,
+  label: name,
+  icon: "file",
+  app: "mousepad",
+});
+
+function launch(item: Item) {
+  if (item.icon === "file")
+    openWindow("mousepad", { file: item.label, title: `mousepad - ${item.label}` });
+  else openWindow(item.app, item.url ? { url: item.url } : {});
+}
+
+function newFile() {
+  const files = get().files;
+  let name = "untitled.txt";
+  for (let n = 2; name in files; n++) name = `untitled-${n}.txt`;
+  set((s) => ({ files: { ...s.files, [name]: "" } }));
+  openWindow("mousepad", { file: name, title: `mousepad - ${name}` });
+}
+
+function Clock() {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 20_000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <span class="clock">{now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+  );
+}
+
+type Menu = { x: number; y: number; item: Item | null };
 
 export function Desktop() {
   const icons = useOs((s) => s.icons);
-  const windows = useOs((s) => s.windows);
   const files = useOs((s) => s.files);
-  const [menu, setMenu] = useState(false);
-  const [offset, setOffset] = useState<{ keys: string[]; dx: number; dy: number } | null>(null);
-
-  const [ctx, setCtx] = useState<Ctx | null>(null);
-  const [props, setProps] = useState<Props | null>(null);
-  const area = useRef<HTMLDivElement | null>(null);
-  const [sel, setSel] = useState<string[]>([]);
-  const [band, setBand] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+  const wins = useOs((s) => s.wins);
   const wallpaper = useOs((s) => s.wallpaper);
-  const [clock, setClock] = useState("");
+  const [start, setStart] = useState(false);
+  const [menu, setMenu] = useState<Menu | null>(null);
+  const [props, setProps] = useState<Item | null>(null);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [band, setBand] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+  const [drag, setDrag] = useState<{ keys: string[]; dx: number; dy: number } | null>(null);
+  const area = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const tick = () =>
-      setClock(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
-    tick();
-    const t = setInterval(tick, 20000);
-    return () => clearInterval(t);
-  }, []);
-
-  const fileIcons: IconDef[] = Object.keys(files).map((f) => ({
-    key: `file:${f}`,
-    label: f,
-    glyph: "file",
-    app: "editor",
-  }));
-  const all = [...ICONS, ...fileIcons];
-
-  const posOf = (key: string, i: number) =>
-    icons[key] ?? { col: Math.floor(i / 6), row: i % 6 };
-
-  const launch = (icon: IconDef) => {
-    if (icon.key.startsWith("file:")) {
-      const f = icon.key.slice(5);
-      openWindow("editor", { file: f, draft: files[f] ?? "", title: `mousepad - ${f}` });
-      return;
-    }
-    openWindow(icon.app, icon.url ? { url: icon.url, title: icon.label } : {});
+  const items = [...APPS, ...Object.keys(files).map(fileItem)];
+  const spot = (key: string) => {
+    const i = items.findIndex((it) => it.key === key);
+    return icons[key] ?? { col: Math.floor(i / PER_COL), row: i % PER_COL };
   };
 
-  /** rubber-band selection, the way a real file manager does it */
-  const onAreaPointerDown = (e: React.PointerEvent) => {
-    if (e.button !== 0) return;
-    if ((e.target as HTMLElement).closest(".dicon")) return;
-    if (!area.current) return;
-    const rect = layoutBox(area.current);
-    const additive = e.shiftKey || e.ctrlKey || e.metaKey;
-    const base = additive ? sel : [];
-    if (!additive) setSel([]);
-    const start = pt(e);
-    const sx = start.x;
-    const sy = start.y;
-    let dragging = false;
+  const onAreaDown = (e: PointerEvent) => {
+    if (e.button !== 0 || (e.target as Element).closest(".dicon") || !area.current) return;
+    const rect = area.current.getBoundingClientRect();
+    const keep = e.shiftKey || e.ctrlKey || e.metaKey ? selected : [];
+    setSelected(keep);
+    const sx = e.clientX;
+    const sy = e.clientY;
 
     const move = (ev: PointerEvent) => {
-      const p = pt(ev);
-      if (!dragging && Math.abs(p.x - sx) + Math.abs(p.y - sy) < 4) return;
-      dragging = true;
-      const x = Math.min(sx, p.x) - rect.left;
-      const y = Math.min(sy, p.y) - rect.top;
-      const w = Math.abs(p.x - sx);
-      const h = Math.abs(p.y - sy);
-      setBand({ x, y, w, h });
+      if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) < 4) return;
+      const l = Math.min(sx, ev.clientX);
+      const t = Math.min(sy, ev.clientY);
+      const r = Math.max(sx, ev.clientX);
+      const b = Math.max(sy, ev.clientY);
+      setBand({ x: l - rect.left, y: t - rect.top, w: r - l, h: b - t });
       const hit: string[] = [];
-      area.current?.querySelectorAll<HTMLElement>(".dicon").forEach((el) => {
-        const b = layoutBox(el);
-        const inside =
-          b.left + b.width > Math.min(sx, p.x) &&
-          b.left < Math.max(sx, p.x) &&
-          b.top + b.height > Math.min(sy, p.y) &&
-          b.top < Math.max(sy, p.y);
-        if (inside && el.dataset["key"]) hit.push(el.dataset["key"]);
+      area.current!.querySelectorAll<HTMLElement>(".dicon").forEach((el) => {
+        const box = el.getBoundingClientRect();
+        if (box.right > l && box.left < r && box.bottom > t && box.top < b)
+          hit.push(el.dataset.key!);
       });
-      setSel([...new Set([...base, ...hit])]);
+      setSelected([...new Set([...keep, ...hit])]);
     };
     const up = () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", up);
-      window.removeEventListener("pointercancel", up);
+      removeEventListener("pointermove", move);
+      removeEventListener("pointerup", up);
       setBand(null);
     };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", up);
-    window.addEventListener("pointercancel", up);
+    addEventListener("pointermove", move);
+    addEventListener("pointerup", up);
   };
 
-  const onIconPointerDown = (key: string) => (e: React.PointerEvent) => {
+  // drags the whole selection
+  const onIconDown = (key: string) => (e: PointerEvent) => {
     if (e.button !== 0) return;
-    const additive = e.shiftKey || e.ctrlKey || e.metaKey;
-    const group = additive
-      ? sel.includes(key)
-        ? sel.filter((k) => k !== key)
-        : [...sel, key]
-      : sel.includes(key)
-        ? sel
-        : [key];
-    setSel(group);
-    if (additive && !group.includes(key)) return;
+    const add = e.shiftKey || e.ctrlKey || e.metaKey;
+    let group = selected.includes(key) ? selected : [key];
+    if (add)
+      group = selected.includes(key) ? selected.filter((k) => k !== key) : [...selected, key];
+    setSelected(group);
+    if (!group.includes(key)) return;
 
-    const startX = e.clientX;
-    const startY = e.clientY;
+    const sx = e.clientX;
+    const sy = e.clientY;
+    let dx = 0;
+    let dy = 0;
     let moved = false;
-    let last = { x: 0, y: 0 };
     const move = (ev: PointerEvent) => {
-      const d = unspinDelta(ev.clientX - startX, ev.clientY - startY);
-      last = d;
-      if (!moved && Math.abs(d.x) + Math.abs(d.y) <= 6) return;
+      dx = ev.clientX - sx;
+      dy = ev.clientY - sy;
+      if (!moved && Math.abs(dx) + Math.abs(dy) <= 6) return;
       moved = true;
-      setOffset({ keys: group, dx: d.x, dy: d.y });
+      setDrag({ keys: group, dx, dy });
     };
     const up = () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", up);
-      window.removeEventListener("pointercancel", up);
-      setOffset(null);
-      if (!moved) return;
-      // snap the whole group by the same grid delta, so relative layout survives
-      const dc = Math.round(last.x / COL);
-      const dr = Math.round(last.y / ROW);
-      if (dc === 0 && dr === 0) return;
-      setState((s) => {
+      removeEventListener("pointermove", move);
+      removeEventListener("pointerup", up);
+      setDrag(null);
+      const dc = Math.round(dx / COL);
+      const dr = Math.round(dy / ROW);
+      if (!moved || (!dc && !dr)) return;
+      set((s) => {
         const next = { ...s.icons };
         for (const k of group) {
-          const i = all.findIndex((a) => a.key === k);
-          const p = s.icons[k] ?? { col: Math.floor(i / 6), row: i % 6 };
+          const p = spot(k);
           next[k] = { col: Math.max(0, p.col + dc), row: Math.max(0, p.row + dr) };
         }
         return { icons: next };
       });
     };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", up);
-    window.addEventListener("pointercancel", up);
+    addEventListener("pointermove", move);
+    addEventListener("pointerup", up);
   };
 
-
-  const openCtx = (icon: IconDef | null) => (e: React.MouseEvent) => {
+  const openMenu = (item: Item | null) => (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (icon && !sel.includes(icon.key)) setSel([icon.key]);
-    if (!icon) setSel([]);
-    setMenu(false);
-    setCtx({ x: e.clientX, y: e.clientY, icon });
+    if (item && !selected.includes(item.key)) setSelected([item.key]);
+    if (!item) setSelected([]);
+    setStart(false);
+    setMenu({ x: e.clientX, y: e.clientY, item });
   };
 
-  const showProps = (icon: IconDef) => {
-    const isFile = icon.key.startsWith("file:");
-    const p = icons[icon.key];
-    const body: [string, string][] = isFile
-      ? [
-          ["name", icon.label],
-          ["type", "text/plain"],
-          ["size", `${new Blob([files[icon.label] ?? ""]).size} bytes`],
-          ["lines", String((files[icon.label] ?? "").split("\n").length)],
-          ["opens with", "mousepad"],
-          ["position", p ? `col ${p.col}, row ${p.row}` : "auto"],
-        ]
-      : [
-          ["name", icon.label],
-          ["type", "application"],
-          ["unit", `${icon.app}.app`],
-          ["exec", `/usr/bin/${icon.app}`],
-          ["position", p ? `col ${p.col}, row ${p.row}` : "auto"],
-        ];
-    setProps({ icon, body });
+  const act = (fn: () => void) => () => {
+    fn();
+    setMenu(null);
   };
 
-  const deleteFile = (icon: IconDef) => {
-    const f = icon.label;
-    setState((s) => {
-      const next = { ...s.files };
-      delete next[f];
-      const nextIcons = { ...s.icons };
-      delete nextIcons[icon.key];
-      return { files: next, icons: nextIcons };
+  const forget = (key: string) =>
+    set((s) => {
+      const icons = { ...s.icons };
+      delete icons[key];
+      return { icons };
     });
-  };
 
-  const newFile = () => {
-    // compute inside the updater so rapid creates see the freshest file list,
-    // and use `in` because an empty file ("") is falsy
-    let name = "untitled.txt";
-    setState((s) => {
-      let n = 1;
-      name = "untitled.txt";
-      while (name in s.files) name = `untitled-${++n}.txt`;
-      return { files: { ...s.files, [name]: "" } };
+  const remove = (item: Item) =>
+    set((s) => {
+      const files = { ...s.files };
+      const icons = { ...s.icons };
+      delete files[item.label];
+      delete icons[item.key];
+      return { files, icons };
     });
-    openWindow("editor", { file: name, draft: "", title: `mousepad - ${name}` });
-  };
-
-
-  const tidyIcons = () => setState(() => ({ icons: {} }));
 
   return (
-    <div
-      className="desktop"
-      style={wallpaper ? { backgroundImage: `url(${wallpaper})` } : undefined}
-      data-wall={wallpaper ? "" : undefined}
-    >
-      <div className="desktop-topbar">
+    <>
+      <div
+        class={wallpaper ? "desktop papered" : "desktop"}
+        style={wallpaper ? { backgroundImage: `url(${wallpaper})` } : undefined}
+      >
+        <div class="icons" ref={area} onPointerDown={onAreaDown} onContextMenu={openMenu(null)}>
+          {band && (
+            <div
+              class="band"
+              style={{ left: band.x, top: band.y, width: band.w, height: band.h }}
+            />
+          )}
+          {drag?.keys.map((k) => {
+            const p = spot(k);
+            const col = Math.max(0, p.col + Math.round(drag.dx / COL));
+            const row = Math.max(0, p.row + Math.round(drag.dy / ROW));
+            return (
+              <div
+                key={"ghost" + k}
+                class="ghost"
+                style={{ left: col * COL + 12, top: row * ROW + 10 }}
+              />
+            );
+          })}
+          {items.map((it) => {
+            const p = spot(it.key);
+            const moving = drag?.keys.includes(it.key);
+            return (
+              <button
+                key={it.key}
+                data-key={it.key}
+                class={`dicon${selected.includes(it.key) ? " selected" : ""}${moving ? " moving" : ""}`}
+                style={{
+                  left: p.col * COL + 12,
+                  top: p.row * ROW + 10,
+                  transform: moving ? `translate(${drag!.dx}px, ${drag!.dy}px)` : undefined,
+                }}
+                onPointerDown={onIconDown(it.key)}
+                onDblClick={() => launch(it)}
+                onContextMenu={openMenu(it)}
+              >
+                <Icon name={it.icon} />
+                <span>{it.label}</span>
+              </button>
+            );
+          })}
+          <pre class="desk-duck">{DUCK}</pre>
+        </div>
+      </div>
+
+      <div class="topbar">
         <button
-          className={`start-btn${menu ? " open" : ""}`}
-          onClick={() => setMenu((m) => !m)}
-          aria-expanded={menu}
+          class={start ? "start open" : "start"}
+          onClick={() => setStart(!start)}
+          aria-expanded={start}
         >
-          <span className="start-glyph" aria-hidden>
-            ▤
-          </span>
           menu
         </button>
-        <span className="topbar-sep" aria-hidden />
-        <span className="topbar-right">
-          <span className="topbar-clock">{clock}</span>
-        </span>
-        {menu && (
-          <>
-            <div className="start-scrim" onClick={() => setMenu(false)} />
-            <div className="start-menu">
-              {ICONS.map((i) => (
-                <button
-                  key={i.key}
-                  onClick={() => {
-                    setMenu(false);
-                    launch(i);
-                  }}
-                >
-                  <AppGlyph name={i.glyph} className="mglyph" />
-
-                  {i.label}
-                </button>
-              ))}
-              {fileIcons.length > 0 &&
-                fileIcons.map((i) => (
-                  <button
-                    key={i.key}
-                    onClick={() => {
-                      setMenu(false);
-                      launch(i);
-                    }}
-                  >
-                    <AppGlyph name={i.glyph} className="mglyph" />
-
-                    {i.label}
-                  </button>
-                ))}
-            </div>
-          </>
-        )}
+        <Clock />
       </div>
-
-      <div
-        className="desktop-icons"
-        ref={area}
-        onPointerDown={onAreaPointerDown}
-        onContextMenu={openCtx(null)}
-      >
-        {band && (
-          <div
-            className="select-band"
-            style={{ left: band.x, top: band.y, width: band.w, height: band.h }}
-          />
-        )}
-        {offset &&
-          (() => {
-            const dc = Math.round(offset.dx / COL);
-            const dr = Math.round(offset.dy / ROW);
-            return offset.keys.map((k) => {
-              const i = all.findIndex((a) => a.key === k);
-              if (i < 0) return null;
-              const p = posOf(k, i);
-              return (
-                <div
-                  key={`ghost:${k}`}
-                  className="drop-ghost"
-                  style={{
-                    left: Math.max(0, p.col + dc) * COL + 12,
-                    top: Math.max(0, p.row + dr) * ROW + 10,
-                  }}
-                />
-              );
-            });
-          })()}
-        {all.map((icon, i) => {
-          const p = posOf(icon.key, i);
-          const moving = offset?.keys.includes(icon.key);
-          return (
-            <button
-              key={icon.key}
-              data-key={icon.key}
-              className={`dicon${moving ? " dragging" : ""}${sel.includes(icon.key) ? " is-selected" : ""}`}
-              style={{
-                left: p.col * COL + 12,
-                top: p.row * ROW + 10,
-                transform: moving ? `translate3d(${offset!.dx}px, ${offset!.dy}px, 0)` : undefined,
-              }}
-              onPointerDown={onIconPointerDown(icon.key)}
-              onDoubleClick={() => launch(icon)}
-              onContextMenu={openCtx(icon)}
-            >
-              <AppGlyph name={icon.glyph} className="glyph" />
-
-              <span>{icon.label}</span>
-            </button>
-          );
-        })}
-
-        <pre
-          className="duck-big"
-          style={{ position: "absolute", right: 24, bottom: 20, opacity: 0.5 }}
-        >
-          {DUCK_ASCII}
-        </pre>
-      </div>
-
-      {ctx && (
+      {start && (
         <>
-          <div className="ctx-scrim" onClick={() => setCtx(null)} onContextMenu={(e) => {
-            e.preventDefault();
-            setCtx(null);
-          }} />
-          <div className="ctx-menu" style={{ left: Math.min(ctx.x, window.innerWidth - 190), top: Math.min(ctx.y, window.innerHeight - 220) }}>
-            {ctx.icon ? (
+          <div class="scrim" onClick={() => setStart(false)} />
+          <div class="startmenu">
+            {items.map((it) => (
+              <button key={it.key} onClick={() => (setStart(false), launch(it))}>
+                <Icon name={it.icon} />
+                {it.label}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      {menu && (
+        <>
+          <div
+            class="scrim"
+            onClick={() => setMenu(null)}
+            onContextMenu={(e) => (e.preventDefault(), setMenu(null))}
+          />
+          <div
+            class="ctx"
+            style={{
+              left: Math.min(menu.x, innerWidth - 190),
+              top: Math.min(menu.y, innerHeight - 220),
+            }}
+          >
+            {menu.item ? (
               <>
-                <span className="ctx-title">{ctx.icon.label}</span>
-                <button onClick={() => { launch(ctx.icon!); setCtx(null); }}>open</button>
-                {ctx.icon.key.startsWith("file:") ? (
-                  <>
-                    <button onClick={() => { openWindow("editor", { file: ctx.icon!.label, draft: files[ctx.icon!.label] ?? "", title: `mousepad - ${ctx.icon!.label}` }); setCtx(null); }}>
-                      edit in mousepad
-                    </button>
-                    <button onClick={() => { deleteFile(ctx.icon!); setCtx(null); }}>delete</button>
-                  </>
+                <span class="label">{menu.item.label}</span>
+                <button onClick={act(() => launch(menu.item!))}>open</button>
+                {menu.item.icon === "file" ? (
+                  <button onClick={act(() => remove(menu.item!))}>delete</button>
                 ) : (
-                  <button onClick={() => { openWindow(ctx.icon!.app, ctx.icon!.url ? { url: ctx.icon!.url, title: ctx.icon!.label } : {}); setCtx(null); }}>
-                    open new instance
-                  </button>
+                  <button onClick={act(() => launch(menu.item!))}>open new instance</button>
                 )}
-                <button onClick={() => { setState((s) => { const n = { ...s.icons }; delete n[ctx.icon!.key]; return { icons: n }; }); setCtx(null); }}>
-                  reset position
-                </button>
-                <span className="ctx-sep" />
-                <button onClick={() => { showProps(ctx.icon!); setCtx(null); }}>properties</button>
+                <button onClick={act(() => forget(menu.item!.key))}>reset position</button>
+                <hr />
+                <button onClick={act(() => setProps(menu.item))}>properties</button>
               </>
             ) : (
               <>
-                <span className="ctx-title">desktop</span>
-                <button onClick={() => { newFile(); setCtx(null); }}>new text file</button>
-                <button onClick={() => { openWindow("terminal", {}); setCtx(null); }}>open terminal</button>
-                <button onClick={() => { tidyIcons(); setCtx(null); }}>tidy icons</button>
-                <span className="ctx-sep" />
-                <button onClick={() => { setState(() => ({ wallpaper: null })); setCtx(null); }}>clear wallpaper</button>
-                <button onClick={() => { openWindow("taskmgr", {}); setCtx(null); }}>task manager</button>
+                <span class="label">desktop</span>
+                <button onClick={act(newFile)}>new text file</button>
+                <button onClick={act(() => openWindow("terminal"))}>open terminal</button>
+                <button onClick={act(() => set({ icons: {} }))}>tidy icons</button>
+                <hr />
+                <button onClick={act(() => set({ wallpaper: null }))}>clear wallpaper</button>
+                <button onClick={act(() => openWindow("taskmgr"))}>task manager</button>
               </>
             )}
           </div>
         </>
       )}
 
-      {props && <PropsWindow data={props} onClose={() => setProps(null)} />}
+      {props && <Properties item={props} where={icons[props.key]} onClose={() => setProps(null)} />}
 
-      <div className="taskbar">
-        {windows.length === 0 && (
-          <span className="small" style={{ opacity: 0.55 }}>
-            double click an icon.
-          </span>
-        )}
-        {windows.map((w) => (
+      <div class="taskbar">
+        {wins.length === 0 && <span class="hint">double click an icon.</span>}
+        {wins.map((w) => (
           <button
             key={w.id}
-            className={`task ${w.minimized ? "" : "active"}`}
-            onClick={() =>
-              w.minimized ? focusWindow(w.id) : updateWindow(w.id, { minimized: true })
-            }
-            onAuxClick={(e) => {
-              if (e.button === 1) closeWindow(w.id);
-            }}
+            class={w.min ? "" : "on"}
             title="click to toggle, middle click to close"
+            onClick={() => (w.min ? focusWindow(w.id) : updateWindow(w.id, { min: true }))}
+            onAuxClick={(e) => e.button === 1 && closeWindow(w.id)}
           >
             {w.title}
           </button>
         ))}
       </div>
-    </div>
+    </>
   );
 }
 
-function PropsWindow({ data, onClose }: { data: Props; onClose: () => void }) {
-  const [pos, setPos] = useState(() => ({
-    x: Math.max(20, Math.round(window.innerWidth / 2 - 190)),
-    y: Math.max(40, Math.round(window.innerHeight / 2 - 160)),
-  }));
-  const drag = useRef<{ dx: number; dy: number } | null>(null);
+function Properties({
+  item,
+  where,
+  onClose,
+}: {
+  item: Item;
+  where?: { col: number; row: number };
+  onClose: () => void;
+}) {
+  const text = get().files[item.label] ?? "";
+  const position = where ? `col ${where.col}, row ${where.row}` : "auto";
+  const rows: [string, string][] =
+    item.icon === "file"
+      ? [
+          ["name", item.label],
+          ["type", "text/plain"],
+          ["size", `${new Blob([text]).size} bytes`],
+          ["lines", String(text.split("\n").length)],
+          ["opens with", "mousepad"],
+          ["position", position],
+        ]
+      : [
+          ["name", item.label],
+          ["type", "application"],
+          ["unit", `${item.app}.app`],
+          ["exec", `/usr/bin/${item.app}`],
+          ["position", position],
+        ];
 
-  const onDown = (e: React.PointerEvent) => {
-    if ((e.target as HTMLElement).closest("button")) return;
-    drag.current = { dx: e.clientX - pos.x, dy: e.clientY - pos.y };
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-  };
-  const onMove = (e: React.PointerEvent) => {
-    if (!drag.current) return;
-    setPos({
-      x: Math.min(window.innerWidth - 80, Math.max(0, e.clientX - drag.current.dx)),
-      y: Math.min(window.innerHeight - 40, Math.max(0, e.clientY - drag.current.dy)),
-    });
-  };
-  const onUp = () => {
-    drag.current = null;
+  const [pos, setPos] = useState({ x: innerWidth / 2 - 190, y: innerHeight / 2 - 160 });
+  const grab = (e: PointerEvent) => {
+    if ((e.target as Element).closest("button")) return;
+    const ox = e.clientX - pos.x;
+    const oy = e.clientY - pos.y;
+    const move = (ev: PointerEvent) =>
+      setPos({ x: ev.clientX - ox, y: Math.max(0, ev.clientY - oy) });
+    const up = () => {
+      removeEventListener("pointermove", move);
+      removeEventListener("pointerup", up);
+    };
+    addEventListener("pointermove", move);
+    addEventListener("pointerup", up);
   };
 
-  return createPortal(
-    <div className="ctx-props is-window" style={{ left: pos.x, top: pos.y }}>
-      <div
-        className="ctx-props-head"
-        onPointerDown={onDown}
-        onPointerMove={onMove}
-        onPointerUp={onUp}
-      >
-        <span>{data.icon.label} - properties</span>
-        <button className="mini-btn" onClick={onClose}>
-          x
-        </button>
+  return (
+    <div class="props" style={{ left: pos.x, top: pos.y }}>
+      <div class="bar" onPointerDown={grab}>
+        <span>{item.label} - properties</span>
+        <button onClick={onClose}>x</button>
       </div>
       <dl>
-        {data.body.map(([k, v]) => (
-          <div key={k}>
+        {rows.map(([k, v]) => (
+          <>
             <dt>{k}</dt>
             <dd>{v}</dd>
-          </div>
+          </>
         ))}
       </dl>
-    </div>,
-    document.body,
+    </div>
   );
 }

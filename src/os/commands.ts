@@ -1,41 +1,43 @@
-import { spinAngle } from "./spin";
-import { PAGES, pageByName } from "@/lib/site";
+import { go } from "../page/nav";
+import { siteAngle } from "./spin";
 import {
-  SERVICES,
-  getState,
-  logoutReset,
+  UNITS,
+  get,
+  kioskOn,
   openWindow,
-  setState,
-  updateWindow,
-  type ServiceName,
-  type TermLine,
-  type ThemeName,
-} from "./store";
+  reset,
+  set,
+  startKiosk,
+  type Theme,
+  type Unit,
+} from "./state";
 
-export type Pending = null | { kind: "logout" } | { kind: "light" };
+export type Line = { k: "in" | "out" | "err" | "dim"; t: string };
+export type Pending = null | "logout" | "light";
+export type Result = { lines: Line[]; clear?: boolean; close?: boolean; ask?: Pending };
+export type Ctx = { history: string[]; clearHistory: () => void };
 
-export type CmdResult = {
-  lines: TermLine[];
-  clear?: boolean;
-  close?: boolean;
-  pending?: Pending;
-};
+const out = (...t: string[]): Line[] => t.map((t) => ({ k: "out", t }));
+const err = (...t: string[]): Line[] => t.map((t) => ({ k: "err", t }));
+const dim = (...t: string[]): Line[] => t.map((t) => ({ k: "dim", t }));
 
-const out = (...v: string[]): TermLine[] => v.map((x) => ({ t: "out" as const, v: x }));
-const err = (...v: string[]): TermLine[] => v.map((x) => ({ t: "err" as const, v: x }));
-const dim = (...v: string[]): TermLine[] => v.map((x) => ({ t: "dim" as const, v: x }));
+export const PAGES: [string, string][] = [
+  ["home", "/"],
+  ["projects", "/projects/"],
+  ["blog", "/blog/"],
+  ["likes", "/likes/"],
+  ["contact", "/contact/"],
+];
 
-const THEMES: ThemeName[] = ["default", "green", "red", "cyan", "light", "aero"];
+const THEMES: Theme[] = ["default", "green", "red", "cyan", "light", "aero"];
 
-const HELP_ROWS: [string, string][] = [
+const HELP: [string, string][] = [
   ["help", "this list"],
   ["ls", "list the pages served by this host"],
   ["open <page>", "navigate to a page"],
-  
   ["cd <path>", "change directory"],
   ["clear", "clear the screen"],
   ["history [-c]", "commands typed in this terminal. -c wipes the list"],
-
   ["systemctl list-units", "list units on this host and their state"],
   ["systemctl status <unit>", "report the state of a unit"],
   ["systemctl start <unit>", "bring a unit up"],
@@ -46,27 +48,11 @@ const HELP_ROWS: [string, string][] = [
   ["spin -f", "freeze it at the current angle"],
   ["spin stop", "stand it back up from any state"],
   ["spin -h", "the full list of spin flags"],
-  ["theme <name>", "default | green | red | cyan | light | aero"],
-  ["theme custom", "open the colour panel"],
+  ["theme <name>", THEMES.join(" | ")],
+  ["theme custom", "pick your own colours (or: theme custom bg=#111 accent=#fc0)"],
   ["lore", "what this machine is"],
   ["logout", "end the guest session and erase it"],
 ];
-
-/* two columns are unreadable once the window is phone-width, so stack them */
-function helpLines() {
-  const narrow = typeof window !== "undefined" && window.innerWidth < 760;
-  const body = HELP_ROWS.flatMap(([cmd, desc]) =>
-    narrow ? [`  ${cmd}`, `      ${desc}`] : [`  ${cmd.padEnd(24)}${desc}`],
-  );
-  return [
-    "available commands - arguments in <> are required, [] optional",
-    "",
-    ...body,
-    "",
-    "commands are case insensitive and may be prefixed with sudo.",
-  ];
-}
-
 
 const LORE = [
   "this host runs one application in kiosk mode.",
@@ -84,83 +70,59 @@ const LORE = [
   "it is not written down anywhere. go and look.",
 ];
 
-function unitOf(name: string): ServiceName | null {
-  const n = name.toLowerCase();
-  const full = (n.endsWith(".service") ? n : `${n}.service`) as ServiceName;
-  return SERVICES.includes(full) ? full : null;
+function help() {
+  // two columns don't fit on a phone, so stack them there
+  const narrow = window.innerWidth < 760;
+  const rows = HELP.flatMap(([cmd, what]) =>
+    narrow ? [`  ${cmd}`, `      ${what}`] : [`  ${cmd.padEnd(24)}${what}`],
+  );
+  return dim(
+    "available commands - arguments in <> are required, [] optional",
+    "",
+    ...rows,
+    "",
+    "commands are case insensitive and may be prefixed with sudo.",
+  );
 }
 
-export type CmdCtx = {
-  navigate: (path: string) => void;
-  pathname: string;
-  winId: number;
-};
-
-export function runCommand(raw: string, ctx: CmdCtx): CmdResult {
-  let input = raw.trim();
-  if (!input) return { lines: [] };
-  if (/^sudo\s+/i.test(input)) input = input.replace(/^sudo\s+/i, "");
-  const parts = input.split(/\s+/);
-  const cmd = (parts[0] ?? "").toLowerCase();
-  const args = parts.slice(1);
-  const s = getState();
-  const kiosk = s.services["lucazani.service"] === "active";
+export function run(raw: string, ctx: Ctx): Result {
+  const words = raw
+    .trim()
+    .replace(/^sudo\s+/i, "")
+    .split(/\s+/);
+  const cmd = words[0].toLowerCase();
+  const args = words.slice(1);
 
   switch (cmd) {
+    case "":
+      return { lines: [] };
     case "help":
     case "?":
-      return { lines: dim(...helpLines()) };
-
+      return { lines: help() };
     case "clear":
       return { lines: [], clear: true };
-
+    case "exit":
+      return { lines: [], close: true };
     case "ls":
-      return {
-        lines: out(PAGES.map((p) => p.name).join("   ")),
-      };
-
+      return { lines: out(PAGES.map((p) => p[0]).join("   ")) };
     case "cd":
       return {
         lines: err(`cd: ${args[0] ?? "/"}: permission denied`, "this session is confined."),
       };
-
     case "whoami":
       return { lines: out("guest") };
-
-    case "open": {
-      if (!args[0]) return { lines: err("open: missing operand", "usage: open <page>") };
-      const page = pageByName(args[0]);
-      if (!page)
-        return {
-          lines: err(`open: ${args[0]}: no such page`, `try: ${PAGES.map((p) => p.name).join(", ")}`),
-        };
-      if (!kiosk) {
-        openWindow("browser", { url: page.path, title: `browser - ${page.name}` });
-        return {
-          lines: dim(
-            `lucazani.service is not running; ${page.name} handed to the browser instead.`,
-          ),
-        };
-      }
-      if (ctx.pathname === page.path)
-        return { lines: err(`open: ${page.name}: already on this page`) };
-      ctx.navigate(page.path);
-      return { lines: dim(`opening ${page.name}...`) };
-    }
-
-    case "systemctl":
-      return systemctl(args, ctx);
-
-
-    case "spin":
-      return spin(args);
-
     case "lore":
       return { lines: dim(...LORE) };
-
+    case "open":
+      return open(args[0]);
+    case "systemctl":
+      return systemctl(args);
+    case "spin":
+      return spin(args);
     case "theme":
       return theme(args);
-
+    case "history":
+      return history(args[0], ctx);
     case "logout":
       return {
         lines: out(
@@ -169,88 +131,125 @@ export function runCommand(raw: string, ctx: CmdCtx): CmdResult {
           "  unit states and the current theme.",
           "the machine will come back up as if you had never been here.",
         ),
-        pending: { kind: "logout" },
+        ask: "logout",
       };
-
-    case "history":
-      return histCmd(args, ctx);
-
-
-    case "exit":
-      return { lines: [], close: true };
-
-
-/** history [-c] - the commands typed in *this* terminal. Survives kiosk restarts. */
-function histCmd(args: string[], ctx: CmdCtx): CmdResult {
-  const flag = (args[0] ?? "").toLowerCase();
-  const win = getState().windows.find((w) => w.id === ctx.winId);
-  const list = win?.history ?? [];
-
-  if (flag === "-c" || flag === "clear") {
-    updateWindow(ctx.winId, { history: [] });
-    return { lines: dim("history cleared.") };
-  }
-  if (flag && flag !== "-c" && flag !== "clear")
-    return { lines: err(`history: ${flag}: unknown option`, "usage: history [-c]") };
-
-  // the running command is not in the list yet, so it is appended here
-  const all = [...list, "history"];
-  if (all.length === 1) return { lines: dim("no commands yet.") };
-  const width = String(all.length).length;
-  return {
-    lines: out(...all.map((c, i) => `  ${String(i + 1).padStart(width)}  ${c}`)),
-  };
-}
-
-
     default:
       return { lines: err(`${cmd}: command not found`, "type help.") };
   }
 }
 
-function systemctl(args: string[], ctx: CmdCtx): CmdResult {
-  const s = getState();
+export function answer(q: Pending, reply: string): Line[] {
+  const yes = /^y(es)?$/i.test(reply.trim());
+  if (q === "logout") {
+    if (!yes) return dim("aborted. you are still guest.");
+    setTimeout(reset, 60);
+    return dim("session closed. guest deleted.");
+  }
+  if (q === "light") {
+    if (!yes) return dim("wise. staying dark.");
+    set({ theme: "light" });
+    return dim("theme: light. eye folgoration accepted.");
+  }
+  return [];
+}
+
+function pageFor(name: string) {
+  const n = name.toLowerCase().replace(/^\/+|\/+$|\.html$/g, "") || "home";
+  return PAGES.find((p) => p[0] === n);
+}
+
+function open(name?: string): Result {
+  if (!name) return { lines: err("open: missing operand", "usage: open <page>") };
+  const page = pageFor(name);
+  if (!page) {
+    return {
+      lines: err(`open: ${name}: no such page`, `try: ${PAGES.map((p) => p[0]).join(", ")}`),
+    };
+  }
+  const [label, path] = page;
+  if (!kioskOn()) {
+    openWindow("browser", { url: path, title: `browser - ${label}` });
+    return {
+      lines: dim(`lucazani.service is not running; ${label} handed to the browser instead.`),
+    };
+  }
+  if (location.pathname === path) return { lines: err(`open: ${label}: already on this page`) };
+  go(path);
+  return { lines: dim(`opening ${label}...`) };
+}
+
+function history(flag = "", ctx: Ctx): Result {
+  flag = flag.toLowerCase();
+  if (flag === "-c" || flag === "clear") {
+    ctx.clearHistory();
+    return { lines: dim("history cleared.") };
+  }
+  if (flag) return { lines: err(`history: ${flag}: unknown option`, "usage: history [-c]") };
+  // the history command itself isn't in the list yet
+  const all = [...ctx.history, "history"];
+  if (all.length === 1) return { lines: dim("no commands yet.") };
+  const pad = String(all.length).length;
+  return { lines: out(...all.map((c, i) => `  ${String(i + 1).padStart(pad)}  ${c}`)) };
+}
+
+function unitFrom(name: string): Unit | null {
+  const n = name.toLowerCase();
+  const full = (n.endsWith(".service") ? n : `${n}.service`) as Unit;
+  return UNITS.includes(full) ? full : null;
+}
+
+function pid(unit: Unit) {
+  if (unit === "duck.service") return 1;
+  let h = 0;
+  for (const c of unit) h = (h * 31 + c.charCodeAt(0)) | 0;
+  return (Math.abs(h) % 9000) + 400;
+}
+
+function systemctl(args: string[]): Result {
+  const s = get();
   const sub = (args[0] ?? "").toLowerCase();
 
-  if (sub === "list-utils" || sub === "list-units") {
-    const rows = SERVICES.map((u) => {
-      const st = s.services[u];
-      return `  ${u.padEnd(22)} ${st === "active" ? "loaded active   running" : "loaded inactive dead"}`;
-    });
+  // the typo works too
+  if (sub === "list-units" || sub === "list-utils") {
     return {
       lines: [
         ...dim("  UNIT                   LOAD   ACTIVE  SUB"),
-        ...out(...rows),
-        ...dim(`  ${SERVICES.length} units listed.`),
+        ...out(
+          ...UNITS.map(
+            (u) =>
+              `  ${u.padEnd(22)} ${s.units[u] ? "loaded active   running" : "loaded inactive dead"}`,
+          ),
+        ),
+        ...dim(`  ${UNITS.length} units listed.`),
       ],
     };
   }
 
-  const target = args[1];
-  if (!["start", "stop", "status", "restart"].includes(sub))
+  if (!["start", "stop", "status", "restart"].includes(sub)) {
     return {
       lines: err(
-        `systemctl: unknown operation '${sub || ""}'`,
+        `systemctl: unknown operation '${sub}'`,
         "usage: systemctl list-units | systemctl start|stop|status <unit>",
       ),
     };
-  if (!target) return { lines: err(`systemctl ${sub}: missing unit name`) };
-  const unit = unitOf(target);
-  if (!unit) return { lines: err(`Unit ${target} could not be found.`) };
-  const state = s.services[unit];
+  }
+  if (!args[1]) return { lines: err(`systemctl ${sub}: missing unit name`) };
+  const unit = unitFrom(args[1]);
+  if (!unit) return { lines: err(`Unit ${args[1]} could not be found.`) };
+  const active = s.units[unit];
 
   if (sub === "status") {
-    return {
-      lines: [
-        ...out(`● ${unit}`),
-        ...dim(
-          `     Loaded: loaded (/etc/systemd/system/${unit}; enabled)`,
-          `     Active: ${state === "active" ? "active (running)" : "inactive (dead)"}`,
-          `   Main PID: ${unit === "duck.service" ? "1" : Math.abs(hash(unit)) % 9000 + 400}`,
-          unit === "duck.service" ? "      Notes: unit was not part of this image." : "",
-        ).filter((l) => l.v !== ""),
-      ],
-    };
+    const lines = [
+      ...out(`● ${unit}`),
+      ...dim(
+        `     Loaded: loaded (/etc/systemd/system/${unit}; enabled)`,
+        `     Active: ${active ? "active (running)" : "inactive (dead)"}`,
+        `   Main PID: ${pid(unit)}`,
+      ),
+    ];
+    if (unit === "duck.service")
+      lines.push(...dim("      Notes: unit was not part of this image."));
+    return { lines };
   }
 
   if (sub === "restart") {
@@ -258,73 +257,36 @@ function systemctl(args: string[], ctx: CmdCtx): CmdResult {
   }
 
   if (sub === "start") {
-    if (state === "active") return { lines: err(`Job for ${unit} failed: unit is already active.`) };
-    if (unit === "lucazani.service") {
-      startKiosk();
-      return { lines: dim("Starting lucazani.service...") };
-    }
-    setState({ services: { ...s.services, [unit]: "active" } });
+    if (active) return { lines: err(`Job for ${unit} failed: unit is already active.`) };
+    if (unit === "lucazani.service") startKiosk();
+    else set({ units: { ...s.units, [unit]: true } });
     return { lines: dim(`Starting ${unit}...`) };
   }
 
-  // stop
-  if (state === "inactive") return { lines: err(`Job for ${unit} failed: unit is not active.`) };
+  if (!active) return { lines: err(`Job for ${unit} failed: unit is not active.`) };
 
-  if (unit === "duck.service") {
-    setState({ duckFight: true });
-    return {
-      lines: err(
-        "Failed to stop duck.service: operation not permitted.",
-        "Failed to stop duck.service: operation not permitted.",
-        "Failed to kill unit duck.service: no such process. unit still running.",
-      ),
-    };
+  switch (unit) {
+    case "duck.service":
+      set({ overlay: "duck" });
+      return {
+        lines: err(
+          "Failed to stop duck.service: operation not permitted.",
+          "Failed to stop duck.service: operation not permitted.",
+          "Failed to kill unit duck.service: no such process. unit still running.",
+        ),
+      };
+    case "networking.service":
+      set({ units: { ...s.units, [unit]: false } });
+      setTimeout(() => set({ overlay: "bsod" }), 350);
+      break;
+    case "lucazani.service":
+      set({ units: { ...s.units, [unit]: false }, wins: [...s.stash, ...s.wins], stash: [] });
+      break;
+    default:
+      set({ units: { ...s.units, [unit]: false } });
   }
-
-  if (unit === "networking.service") {
-    setState({ services: { ...s.services, [unit]: "inactive" } });
-    setTimeout(() => setState({ bsod: "network" }), 350);
-    return { lines: dim("Stopping networking.service...") };
-  }
-
-  if (unit === "lucazani.service") {
-    setState((st) => ({
-      services: { ...st.services, [unit]: "inactive" },
-      // everything that was hidden behind the kiosk comes back
-      windows: [...st.stashed, ...st.windows],
-      stashed: [],
-    }));
-    void ctx;
-    return { lines: dim("Stopping lucazani.service...") };
-  }
-
-  setState({ services: { ...s.services, [unit]: "inactive" } });
   return { lines: dim(`Stopping ${unit}...`) };
 }
-
-/** Kiosk boot: spinner, then the fullscreen open animation. Safe to call twice. */
-export function startKiosk() {
-  const s = getState();
-  if (s.kioskBooting) return;
-  setState((st) => ({
-    services: { ...st.services, "lucazani.service": "active" },
-    kioskBooting: true,
-    // coming back to the site after the desktop unlocks the footer creed
-    cycled: st.cycled || st.services["lucazani.service"] === "inactive",
-    // the kiosk owns the screen, but the escape terminal stays where it is:
-    // it is the way back out, and its history goes with it
-    windows: st.windows.filter((w) => w.app === "terminal"),
-    stashed: [
-      ...st.stashed,
-      ...st.windows.filter((w) => w.app !== "kiosk" && w.app !== "terminal"),
-    ],
-
-  }));
-  setTimeout(() => {
-    setState({ kioskBooting: false });
-  }, 4300);
-}
-
 
 const SPIN_USAGE = "usage: spin [-r] [-s <seconds-per-turn>] [-f] [stop] [-h]";
 const SPIN_HELP = [
@@ -338,125 +300,104 @@ const SPIN_HELP = [
   "  spin stop      always upright again, from any state",
   "  spin -h        this text",
   "",
-  "the site, the desktop and every window turn together, and the pointer is",
-  "corrected for the angle, so dragging icons and windows still goes where you",
-  "point. overlays stay upright on purpose: the way out never spins.",
+  "the site and every window turn together, and dragging still goes where you",
+  "point. the terminal stays upright on purpose: the way out never spins.",
 ];
-const DEFAULT_SPIN_SPEED = 2;
 
-function spin(args: string[]): CmdResult {
-  const s = getState();
-  let rev = false;
+function spin(args: string[]): Result {
+  const now = get().spin;
+  const upright = (): Result => {
+    set({ spin: { ...now, mode: "off", angle: 0 } });
+    return { lines: dim("upright. nothing was reloaded.") };
+  };
+
+  let reverse = false;
   let speed: number | null = null;
 
   for (let i = 0; i < args.length; i++) {
-    const a = (args[i] ?? "").toLowerCase();
+    const a = args[i].toLowerCase();
     if (a === "-r" || a === "--reverse") {
-      rev = true;
-      continue;
-    }
-    if (a === "-h" || a === "--help") return { lines: dim(...SPIN_HELP) };
-    // always-available way out, whatever state the page is in
-    if (a === "stop" || a === "off" || a === "reset" || a === "0") {
-      if (s.spin === "none") return { lines: err("spin: nothing is spinning") };
-      setState({ spin: "none", spinAngle: 0 });
-      return { lines: dim("upright. nothing was reloaded.") };
-    }
-    if (a === "-f") {
-      if (s.spin === "frozen")
+      reverse = true;
+    } else if (a === "-h" || a === "--help") {
+      return { lines: dim(...SPIN_HELP) };
+    } else if (["stop", "off", "reset", "0"].includes(a)) {
+      if (now.mode === "off") return { lines: err("spin: nothing is spinning") };
+      return upright();
+    } else if (a === "-f") {
+      if (now.mode === "frozen")
         return { lines: err("spin: -f: already frozen", "spin to stand it back up.") };
-      if (s.spin === "none")
-        return { lines: err("spin: -f: nothing is spinning", "bad usage.") };
-      const angle = liveSpinAngle();
-      setState({ spin: "frozen", spinAngle: angle });
+      if (now.mode === "off") return { lines: err("spin: -f: nothing is spinning", "bad usage.") };
+      const angle = siteAngle();
+      set({ spin: { ...now, mode: "frozen", angle } });
       return { lines: dim(`stopped at ${angle.toFixed(1)}°. everything still works. mostly.`) };
+    } else {
+      // -s 3, --speed 3 and -s3 all work
+      const raw =
+        a === "-s" || a === "--speed" ? args[++i] : a.startsWith("-s") ? a.slice(2) : null;
+      if (raw === null) return { lines: err(`spin: unrecognized option '${a}'`, SPIN_USAGE) };
+      const n = Number(raw);
+      if (!raw || !(n > 0))
+        return { lines: err(`spin: -s: '${raw ?? ""}' is not a positive number`, SPIN_USAGE) };
+      speed = Math.min(Math.max(n, 0.15), 60);
     }
-    const raw = a === "-s" || a === "--speed" ? args[++i] : a.startsWith("-s") ? a.slice(2) : null;
-    if (raw === null) return { lines: err(`spin: unrecognized option '${a}'`, SPIN_USAGE) };
-    const n = Number(raw);
-    if (!raw || !Number.isFinite(n) || n <= 0)
-      return { lines: err(`spin: -s: '${raw ?? ""}' is not a positive number`, SPIN_USAGE) };
-    speed = Math.min(Math.max(n, 0.15), 60);
   }
 
-  const running = s.spin === "cw" || s.spin === "ccw";
+  const turning = now.mode === "cw" || now.mode === "ccw";
+  // bare `spin` (and `spin -r` while already going ccw) is the off switch
+  if ((turning || now.mode === "frozen") && speed === null && !reverse) return upright();
+  if (now.mode === "ccw" && reverse && speed === null) return upright();
 
-  // bare `spin` is the off switch for anything that is not upright,
-  // frozen included - otherwise a frozen page had no way back.
-  if ((running || s.spin === "frozen") && speed === null && !rev) {
-    setState({ spin: "none", spinAngle: 0 });
-    return { lines: dim("upright. nothing was reloaded.") };
-  }
-
-  // `spin -r` while already going counter clockwise is also an off switch
-  if (running && rev && s.spin === "ccw" && speed === null) {
-    setState({ spin: "none", spinAngle: 0 });
-    return { lines: dim("upright. nothing was reloaded.") };
-  }
-
-  const next = speed ?? (running ? s.spinSpeed : DEFAULT_SPIN_SPEED);
-  // resume from wherever it is right now instead of snapping to 0.
-  const from = running || s.spin === "frozen" ? liveSpinAngle() : 0;
-  setState({ spin: rev ? "ccw" : "cw", spinAngle: from, spinSpeed: next });
+  const next = speed ?? (turning ? now.speed : 2);
+  const angle = turning || now.mode === "frozen" ? siteAngle() : 0;
+  set({ spin: { mode: reverse ? "ccw" : "cw", angle, speed: next } });
   return {
     lines: dim(
-      `${rev ? "spinning, counter clockwise" : "spinning"} - ${next}s per turn.`,
+      `${reverse ? "spinning, counter clockwise" : "spinning"} - ${next}s per turn.`,
       "spin -s <sec> to change speed, spin -f to freeze, spin to stop.",
     ),
   };
 }
 
-/** Current on-screen rotation of the escape layer, in degrees 0-360. */
-function liveSpinAngle(): number {
-  return spinAngle();
-}
+const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
+const long = (hex: string) =>
+  hex.length === 4 ? "#" + [...hex.slice(1)].map((c) => c + c).join("") : hex.toLowerCase();
 
-
-function theme(args: string[]): CmdResult {
-  const s = getState();
+function theme(args: string[]): Result {
+  const s = get();
   const name = (args[0] ?? "").toLowerCase();
-  if (!name)
-    return {
-      lines: err("theme: missing name", `available: ${THEMES.join(", ")}, custom`),
-    };
-  if (name === "custom") {
-    setState({ themePanel: true, theme: "custom" });
-    return { lines: dim("colour panel open. close it and reopen with theme custom.") };
-  }
-  if (!THEMES.includes(name as ThemeName))
-    return { lines: err(`theme: ${name}: no such theme`, `available: ${THEMES.join(", ")}, custom`) };
+  const list = `available: ${THEMES.join(", ")}, custom`;
+  if (!name) return { lines: err("theme: missing name", list) };
+
+  if (name === "custom") return customTheme(args.slice(1));
+
+  if (!THEMES.includes(name as Theme)) return { lines: err(`theme: ${name}: no such theme`, list) };
   if (s.theme === name) return { lines: err(`theme: ${name} is already applied`) };
   if (name === "light") {
-    return {
-      lines: out("light mode. this will forcibly illuminate your retinas."),
-      pending: { kind: "light" },
-    };
+    return { lines: out("light mode. this will forcibly illuminate your retinas."), ask: "light" };
   }
-  setState({ theme: name as ThemeName, themePanel: false });
+  set({ theme: name as Theme });
   return { lines: dim(`theme: ${name}`) };
 }
 
-function hash(s: string) {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (h << 5) - h + s.charCodeAt(i);
-  return h;
-}
-
-export function applyPending(p: Pending, answer: string, winId: number): TermLine[] {
-  const yes = /^y(es)?$/i.test(answer.trim());
-  if (!p) return [];
-  if (p.kind === "logout") {
-    if (!yes) return dim("aborted. you are still guest.");
-    setTimeout(() => logoutReset(), 60);
-    return dim("session closed. guest deleted.");
+// theme custom bg=#111 fg=#ccc accent=#e8c87a panel=#181818
+// theme custom --bg #111 --accent #fc0
+function customTheme(args: string[]): Result {
+  const s = get();
+  const custom = { ...s.custom };
+  for (let i = 0; i < args.length; i++) {
+    let [key, value] = args[i].replace(/^--?/, "").split("=");
+    if (value === undefined) value = args[++i] ?? "";
+    key = key.toLowerCase();
+    if (!(key in custom))
+      return {
+        lines: err(`theme: custom: unknown colour '${key}'`, "use bg, fg, accent or panel."),
+      };
+    if (!HEX.test(value))
+      return { lines: err(`theme: custom: '${value}' is not a hex colour like #e8c87a`) };
+    custom[key as keyof typeof custom] = long(value);
   }
-  if (p.kind === "light") {
-    if (!yes) return dim("wise. staying dark.");
-    setState({ theme: "light", themePanel: false });
-    void winId;
-    return dim("theme: light. eye folgoration accepted.");
-  }
-  return [];
+  set({ theme: "custom", custom });
+  if (args.length) return { lines: dim("theme: custom") };
+  if (!s.wins.some((w) => w.app === "colours")) openWindow("colours");
+  return { lines: dim("theme: custom. the colour window is open.") };
 }
-
-export { updateWindow };

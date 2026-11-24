@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{title}}</title>
+    <meta name="description" content="{{description}}" />
+    <meta name="author" content="Luca Zani" />
+    <meta property="og:title" content="{{title}}" />
+    <meta property="og:description" content="{{description}}" />
+    <meta property="og:type" content="{{type}}" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="256x256" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/assets/style.css?v={{v}}" />
+    <script type="module" src="/assets/main.js?v={{v}}"></script>
+  </head>
+  <body>
+    <div id="site">
+      <div class="page">
+        <header class="top">
+          <a class="home" href="/"{{home}}>lucazani.com</a>
+          <nav>
+        {{nav}}
+          </nav>
+          <span class="extras">
+            <button type="button" class="cv" title="CV - under construction">cv</button>
+            <a class="src" href="https://github.com/OverloadedTech/website" title="source of this site">src</a>
+            <button type="button" class="escape" title="escape?" aria-label="open terminal">
+              <span aria-hidden="true">🦆</span><span class="say">escape?</span>
+            </button>
+          </span>
+        </header>
+
+        <main>
+{{content}}
+        </main>
+
+        <footer>
+          <p>
+            &copy; {{year}} Luca Zani &middot;
+            <a href="https://github.com/OverloadedTech/website/blob/main/LICENSE">MIT</a> &middot;
+            <a href="https://github.com/OverloadedTech/website">source</a>
+          </p>
+          <p class="creed">
+            Roses are red, violets are blue, McAfee didn't kill himself, and neither should you.
+          </p>
+        </footer>
+      </div>
+    </div>
+    <div id="os"></div>
+  </body>
+</html>
