@@ -33,7 +33,7 @@ If you want to try everything without installing anything, sign up at [hosting.b
 
 ## What's cooking
 
-OAuth is the newest piece and we're still building on it. The idea is that a BananaWiki Hosting account works as the login for everything in the suite. BananaChat already uses it, and BananaGit has a "Sign in with BananaWiki" provider ready for it.
+OAuth is the newest piece and we're still building on it. The idea is that a BananaWiki Hosting account works as the login across the suite. BananaChat already uses it, BananaGit has a "Sign in with BananaWiki" provider ready for it, and on wikis it's up to the owner of each wiki whether to turn it on.
 
 TrentinoTranslate is back on the list too. It got shelved in June 2023 because the dictionary-and-rules approach fell apart on real sentences ([the full story is on the projects page](/projects/#trentinotranslate)). This time the plan is to do it properly, with native speakers adding and reviewing translations and a real dataset behind it, using what I learned building BananaWiki.
 
